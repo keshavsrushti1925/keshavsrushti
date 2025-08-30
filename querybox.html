@@ -148,7 +148,7 @@ document.querySelector('form')?.addEventListener('submit', function(ev){
   if (!/^\d{10}$/.test(v)) {
     ev.preventDefault();
     phone.focus();
-    phone.setCustomValidity('Kripya 10 ankno valid mobile number mukho.');
+    phone.setCustomValidity('કૃપા કરીને તમારો સાચો નંબર લખો');
     phone.reportValidity();
     phone.addEventListener('input', () => phone.setCustomValidity(''), { once: true });
   }
@@ -167,6 +167,7 @@ form.addEventListener("submit", e => {
 </script>
 </body>
 </html>
+
 
 
 
