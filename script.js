@@ -1,193 +1,192 @@
-﻿const PLANTS = [
+const PLANTS = [
   {
     "name": "પડદા વેલ",
     "category": "વેલ",
     "count": 1,
     "benefits": "શેડિંગ માટે ઉપયોગી, પરિસરમાં હરિયાળી અને ઠંડક આપે.",
-    "image": "images/vines/padadavel.jpg"
+    "image": "images/vines/padadavel.webp"
   },
- {
+  {
     "name": "બોગન વેલ (ગુલાબી)",
     "category": "વેલ",
     "count": 4,
     "benefits": "કાંટાદાર પણ ખૂબ ખીલતું વેલ; બાઉન્ડરી/આર્ચ માટે સુંદર દેખાવ.",
-    "image": "images/vines/boganvelgulabi.jpg"
+    "image": "images/vines/boganvelgulabi.webp"
   },
- 
- {
+  {
     "name": "બોગન વેલ (સફેદ)",
     "category": "વેલ",
     "count": 1,
     "benefits": "ઓછા પાણીમાં ચાલે; લાંબા સમય સુધી પુષ્પિત રહે.",
-    "image": "images/vines/boganvelsafed.jpg"
+    "image": "images/vines/boganvelsafed.webp"
   },
- {
+  {
     "name": "મધુમાલતી",
     "category": "વેલ",
     "count": 3,
     "benefits": "સાંજે સુગંધિત ફૂલો; આરકીટ/પરગોલા માટે સરસ કવર.",
-    "image": "images/vines/madhumalti.jpg"
+    "image": "images/vines/madhumalti.webp"
   },
-{
+  {
     "name": "દમવેલ",
     "category": "વેલ",
     "count": 2,
     "benefits": "ઝડપથી ફેલાય; દીવાલ/વાડને હરિયાળી કવર આપે.",
-    "image": "images/vines/damvel.jpg"
+    "image": "images/vines/damvel.webp"
   },
-{
+  {
     "name": "નાગર વેલ",
     "category": "વેલ",
     "count": 2,
     "benefits": "આભૂષણાત્મક પાંદડા; બાલ્કની/ટ્રેલિસ ડેકોર માટે.",
-    "image": "images/vines/nagarvel.jpg"
-  },  
-{
+    "image": "images/vines/nagarvel.webp"
+  },
+  {
     "name": "કમાનવાળી વેલ",
     "category": "વેલ",
     "count": 1,
     "benefits": "વાડ/દરવાજા ઉપર તિરપા કમાન આકારમાં ચઢાવવામાં સરળ.",
-    "image": "images/vines/kamanvalivel.jpg"
+    "image": "images/vines/kamanvalivel.webp"
   },
-{
+  {
     "name": "ધનવેલ",
     "category": "વેલ",
     "count": 1,
     "benefits": "ઝડપી વૃદ્ધિ; લીલું કવર અને પક્ષીઓને આશ્રય.",
-    "image": "images/vines/dhanvel.jpg"
+    "image": "images/vines/dhanvel.webp"
   },
-{
+  {
     "name": "અપરાજિતા",
     "category": "વેલ",
     "count": 1,
     "benefits": "નીલા/સફેદ ફૂલ ચા માટે વપરાય; સજાવટી અને ઔષધીય ઉપયોગ.",
-    "image": "images/vines/aprajita.jpg"
+    "image": "images/vines/aprajita.webp"
   },
-{
+  {
     "name": "સ્વિસ ચીઝ પ્લાન્ટ",
     "category": "ફૂલ છોડ",
     "count": 1,
     "benefits": "ઇન્ડોર ડેકોર માટે લોકપ્રિય; મોટા છિદ્રવાળા પાંદડા હવામાં ભેજ વધારવામાં મદદ કરે.",
- "image": "images/flowers/swichchisplant.jpg"
+    "image": "images/flowers/swichchisplant.webp"
   },
- {
+  {
     "name": "એરો હેડ પ્લાન્ટ",
     "category": "ફૂલ છોડ",
     "count": 1,
     "benefits": "ઇન્ડોર શેડ-ટોલરન્ટ; હવા શુદ્ધીકરણમાં મદદ.",
-    "image": "images/flowers/arohedplant.jpg"
+    "image": "images/flowers/arohedplant.webp"
   },
- {
+  {
     "name": "સ્નેક પ્લાન્ટ",
     "category": "ફૂલ છોડ",
     "count": 6,
     "benefits": "લો-માંટેનન્સ; રાત્રે ઓક્સિજન છોડે—ઇન્ડોર એર ક્વાલિટી સુધારે.",
-    "image": "images/flowers/snekplant.jpg"
+    "image": "images/flowers/snekplant.webp"
   },
- {
+  {
     "name": "સ્લીવિયા પ્લાન્ટ",
     "category": "ફૂલ છોડ",
     "count": 5,
     "benefits": "રંગીન ફૂલોથી બગીચાને આકર્ષક બનાવે; તિતલીઓને આકર્ષે.",
-    "image": "images/flowers/sliviyaplant.jpg"
+    "image": "images/flowers/sliviyaplant.webp"
   },
- {
+  {
     "name": "એરિકા પામ",
     "category": "ફૂલ છોડ",
     "count": 1,
     "benefits": "ઇન્ડોર પામ; વાતાવરણને તાજગી અને હ્યુમિડિટી આપે.",
-    "image": "images/flowers/arimapam.jpg"
+    "image": "images/flowers/arimapam.webp"
   },
- {
+  {
     "name": "પોઈ",
     "category": "ફૂલ છોડ",
     "count": 1,
     "benefits": "લીલા પાંદડાવાળો શાક; પોષક તત્વોથી ભરપૂર.",
-    "image": "images/flowers/poi.jpg"
+    "image": "images/flowers/poi.webp"
   },
- {
+  {
     "name": "મેદી",
     "category": "ફૂલ છોડ",
     "count": 19,
     "benefits": "પાન અને કોપરાંમાં રંગ; પરંપરાગત રીતે સૌંદર્ય અને ઠંડક માટે વપરાય.",
-    "image": "images/flowers/medi.jpg"
+    "image": "images/flowers/medi.webp"
   },
- {
+  {
     "name": "પર્પલ હાર્ટ",
     "category": "ફૂલ છોડ",
     "count": 7,
-    "benefits": "જામણી પાંદડા; બોર્ડર/હેંગિંગ માટે સુંદર ગ્રાઉન્ડ કવર.",
-    "image": "images/flowers/parpalhart.jpg"
+    "benefits": "જામણી પાંદડા; બોર્ડર/હેંગિંગ માટે सुंदर ગ્રાઉન્ડ કવર.",
+    "image": "images/flowers/parpalhart.webp"
   },
- {
+  {
     "name": "અડુલસા",
     "category": "ફૂલ છોડ",
     "count": 12,
     "benefits": "પરંપરાગત રીતે કફ-ખાંસીમાં ઘરગથ્થું ઉપયોગ; બગીચામાં ઔષધીય મૂલ્ય.",
-    "image": "images/flowers/adulasa.jpg"
+    "image": "images/flowers/adulasa.webp"
   },
- {
+  {
     "name": "લીમડો",
     "category": "વૃક્ષ-અન્ય",
     "count": 4,
     "benefits": "કુદરતી જીવાણુનાશક; છાયો આપે, પાન/નિંબોલી પરંપરાગત ઉપયોગ.",
-    "image": "images/trees/limdo.jpg"
+    "image": "images/trees/limdo.webp"
   },
-{
+  {
     "name": "આસોપાલવ",
     "category": "વૃક્ષ-અન્ય",
     "count": 7,
     "benefits": "ઝડપી વૃદ્ધિ; શેડ અને હરિયાળો સ્ક્રીન.",
-    "image": "images/trees/ashopalav.jpg"
+    "image": "images/trees/ashopalav.webp"
   },
- {
+  {
     "name": "જામફળ",
     "category": "વૃક્ષ-અન્ય",
     "count": 1,
     "benefits": "ફળ વિટામિન C ભરપૂર; પાંદડા પરંપરાગત દાંતસાફી માટે.",
-    "image": "images/trees/jamfal.jpg"
+    "image": "images/trees/jamfal.webp"
   },
- {
+  {
     "name": "આંબો",
     "category": "વૃક્ષ-અન્ય",
     "count": 2,
     "benefits": "આમ્રફળ; છાયો અને પરાગણ માટે પક્ષીઓને આકર્ષે.",
-    "image": "images/trees/ambo.jpg"
+    "image": "images/trees/ambo.webp"
   },
- {
+  {
     "name": "ગૂંદી",
     "category": "વૃક્ષ-અન્ય",
     "count": 1,
     "benefits": "લોકલ શોભાવર્ધક ઝાડ; જીવવૈવિધ્ય માટે ઉપયોગી.",
-    "image": "images/trees/gundi.jpg"
+    "image": "images/trees/gundi.webp"
   },
- {
+  {
     "name": "કણજી",
     "category": "વૃક્ષ-અન્ય",
     "count": 1,
     "benefits": "ગ્રામ્ય વિસ્તારમાં સામાન્ય; છાયો અને જમીનની ધારાપકતા વધે.",
-    "image": "images/trees/kanaji.jpg"
+    "image": "images/trees/kanaji.webp"
   },
-{
+  {
     "name": "પાનખર ઝાડી",
     "category": "વૃક્ષ-અન્ય",
     "count": 1,
     "benefits": "મોસમી પાનખરથી માટીમાં કાર્બનિક પદાર્થ વધે.",
-    "image": "images/trees/pankharjadi.jpg"
+    "image": "images/trees/pankharjadi.webp"
   },
-{
+  {
     "name": "અગાવેન અમેરિકાના",
     "category": "વૃક્ષ-અન્ય",
     "count": 6,
     "benefits": "ઝેરૉસ્કેપ માટે યોગ્ય; માટી ધોવાણ રોકે, બોર્ડર માટે.",
-    "image": "images/trees/agaven.jpg"
+    "image": "images/trees/agaven.webp"
   },
-{
+  {
     "name": "વાંસ",
     "category": "વૃક્ષ-અન્ય",
     "count": 3,
     "benefits": "ઝડપી વૃદ્ધિ; માટી બાથું રાખે, હવા શુદ્ધીકરણ.",
-    "image": "images/trees/vans.jpg"
+    "image": "images/trees/vans.webp"
   },
  {
     "name": "શેતૂર",
