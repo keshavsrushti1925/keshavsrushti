@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="gu">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>query box</title>
+<style>
+:root{
+  --bg:#f4f7fb;
+  --card:#ffffff;
+  --accent:#3b82f6;
+  --muted:#6b7280;
+  --success:#10b981;
+  --radius:12px;
+  --shadow: 0 6px 24px rgba(13,38,59,0.08);
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+body{
+  margin:0;
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  background: linear-gradient(180deg, var(--bg), #eef2fb 70%);
+  padding:32px;
+}
+.form-card{
+  width:100%;
+  max-width:520px;
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:28px;
+  box-sizing:border-box;
+}
+.form-card h2{ margin:0 0 8px 0; font-size:20px; color:#0f172a; }
+.form-card p.lead{ margin:0 0 18px 0; color:var(--muted); font-size:14px; }
+.row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.row.full{ grid-template-columns:1fr; }
+.input,.select,.textarea{
+  width:100%; background:#fbfdff; border:1px solid #e6eef8;
+  padding:12px 14px; border-radius:10px; font-size:14px; color:#0b1220;
+  transition:all .18s ease; outline:none;
+}
+.input:focus,.select:focus,.textarea:focus{
+  box-shadow:0 6px 18px rgba(59,130,246,0.12);
+  border-color:var(--accent); transform:translateY(-1px);
+}
+.field{ position:relative; }
+.field label{ font-size:12px; color:var(--muted); margin-bottom:6px; display:block; }
+.textarea{ min-height:110px; resize:vertical; }
+.small{ font-size:12px; color:var(--muted); margin-top:6px; }
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  background:var(--accent); color:#fff; border:none;
+  padding:12px 18px; border-radius:10px; cursor:pointer;
+  font-weight:600; font-size:14px;
+  box-shadow:0 8px 20px rgba(59,130,246,0.14);
+  transition:transform .12s ease, opacity .12s ease;
+}
+.btn:hover{ transform:translateY(-2px); }
+.btn:active{ transform:translateY(0); opacity:0.96; }
+.btn.ghost{ background:transparent; border:1px solid #e6eef8; color:#0f172a; }
+@media (max-width:640px){
+  .row{ grid-template-columns:1fr; }
+  .form-card{ padding:20px; margin:6px; }
+}
+
+/* ==== Success overlay ==== */
+.success-overlay{
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(255,255,255,0.95);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.4s ease;
+}
+.success-overlay.active{
+  opacity:1;
+  pointer-events:auto;
+}
+.success-overlay .check{
+  font-size:80px;
+  color:var(--success);
+  margin-bottom:20px;
+}
+.success-overlay .text{
+  font-size:28px;
+  font-weight:700;
+  color:#0f172a;
+}
+</style>
+</head>
+<body>
+
+<div class="form-card">
+  <h2>query box</h2>
+  <form id="dataForm">
+    <div class="row">
+      <div class="field">
+        <label for="name">નામ</label>
+        <input id="name" name="name" class="input" type="text" placeholder="તમારું નામ" required>
+      </div>
+      <div class="field">
+        <label for="phone">મોબાઈલ નંબર</label>
+        <input id="phone" class="input" name="mobile" type="tel" inputmode="numeric" pattern="^\d{10}$" maxlength="10" placeholder="10 અંકમાં (e.g. 9876543210)" required>
+      </div>
+    </div>
+    <div class="row full" style="margin-top:12px;">
+      <div class="field">
+        <label for="email">ઈ મેઇલ (મરજીયાત)</label>
+        <input id="email" class="input" name="email" type="email" placeholder="you@example.com">
+      </div>
+    </div>
+    <div class="row full" style="margin-top:12px;">
+      <div class="field">
+        <label for="message">your query</label>
+        <textarea id="message" class="textarea" name="query" placeholder="enter your query..." required></textarea>
+    </div>
+    <div style="display:flex; gap:10px; margin-top:16px; justify-content:flex-end;">
+      <button type="submit" class="btn">submit</button>
+      <br>
+<div class="small">સબમિટ કર્યા પછી ૩ સેકંડ રાહ જુઓ</div>
+    </div>
+  </form>
+</div>
+
+<!-- Success Overlay -->
+<div id="successOverlay" class="success-overlay">
+  <div class="check">✔</div>
+  <div class="text">Success</div>
+</div>
+
+<script>
+const phone = document.getElementById('phone');
+phone.addEventListener('input', e => {
+  const cleaned = e.target.value.replace(/\D/g, '').slice(0, 10);
+  if (e.target.value !== cleaned) e.target.value = cleaned;
+});
+
+document.querySelector('form')?.addEventListener('submit', function(ev){
+  const v = phone.value.replace(/\D/g,'');
+  if (!/^\d{10}$/.test(v)) {
+    ev.preventDefault();
+    phone.focus();
+    phone.setCustomValidity('Kripya 10 ankno valid mobile number mukho.');
+    phone.reportValidity();
+    phone.addEventListener('input', () => phone.setCustomValidity(''), { once: true });
+  }
+});
+
+const scriptURL = "https://script.google.com/macros/s/AKfycbzCJl00tkG08bAFh244l4ThZTP7v9rp-PDU5P94rAxbKvpZbByvs0o6AhsIAe8d8QUZ/exec"; 
+const form = document.getElementById("dataForm");
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  fetch(scriptURL, { method: "POST", body: new FormData(form)})
+  .then(() => {
+    document.getElementById("successOverlay").classList.add("active");
+  })
+  .catch(error => alert("❌ Error: " + error.message));
+});
+</script>
+</body>
+</html>
+
+
+
