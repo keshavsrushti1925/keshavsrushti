@@ -188,159 +188,159 @@ const PLANTS = [
     "benefits": "ઝડપી વૃદ્ધિ; માટી બાથું રાખે, હવા શુદ્ધીકરણ.",
     "image": "images/trees/vans.webp"
   },
- {
+{
     "name": "શેતૂર",
     "category": "ફળ-ફૂલ",
     "count": 3,
     "benefits": "ફળ એન્ટીઑક્સીડન્ટોથી ભરપૂર; છાયો આપે.",
-    "image": "images/fruitsflowers/setur.jpg"
+    "image": "images/fruitsflowers/setur.webp"
   },
- {
+  {
     "name": "દાડમ",
     "category": "ફળ-ફૂલ",
     "count": 1,
     "benefits": "હૃદય આરોગ્ય માટે ફાયદાકારક ફળ; સુશોભન મૂલ્ય.",
-    "image": "images/fruitsflowers/dadm.jpg"
+    "image": "images/fruitsflowers/dadm.webp"
   },
- {
+  {
     "name": "રામ ફળી",
     "category": "ફળ-ફૂલ",
     "count": 3,
     "benefits": "શાક માટે ઉપયોગી; નાઈટ્રોજન ફિક્સિંગથી માટી સુધારે.",
-    "image": "images/fruitsflowers/ramfali.jpg"
+    "image": "images/fruitsflowers/ramfali.webp"
   },
-{
+  {
     "name": "સીતાફળી",
     "category": "ફળ-ફૂલ",
     "count": 2,
     "benefits": "મીઠું ફળ; ગરમ પ્રદેશમાં સારી વૃદ્ધિ.",
-    "image": "images/fruitsflowers/sitafali.jpg"
+    "image": "images/fruitsflowers/sitafali.webp"
   },
- {
+  {
     "name": "લીંબુ",
     "category": "ફળ-ફૂલ",
     "count": 5,
     "benefits": "વિટામિન C; રસોડામાં રોજબરોજ ઉપયોગી.",
-    "image": "images/fruitsflowers/limbu.jpg"
+    "image": "images/fruitsflowers/limbu.webp"
   },
-{
+  {
     "name": "લવણ વલી",
     "category": "ફળ-ફૂલ",
     "count": 1,
     "benefits": "માટીને આવરણ આપતું વેલ; મુલ્ચિંગ અસર.",
-    "image": "images/fruitsflowers/lavanvali.jpg"
+    "image": "images/fruitsflowers/lavanvali.webp"
   },
-{
+  {
     "name": "જાંબુ",
     "category": "ફળ-ફૂલ",
     "count": 3,
     "benefits": "ફળ લોહ અને વિટામિન સભર; છાયો આપે.",
-    "image": "images/fruitsflowers/jambu.jpg"
+    "image": "images/fruitsflowers/jambu.webp"
   },
- {
+  {
     "name": "જાસુદ",
     "category": "ફળ-ફૂલ",
     "count": 12,
     "benefits": "ફૂલ વાળની સારસંભાળમાં; તિતલીઓ/મધમાખીઓને આકર્ષે.",
-    "image": "images/fruitsflowers/jashud.jpg"
+    "image": "images/fruitsflowers/jashud.webp"
   },
- {
+  {
     "name": "મોગરો",
     "category": "ફળ-ફૂલ",
     "count": 9,
     "benefits": "તીવ્ર સુગંધિત ફૂલ; ગાલા/હાર માટે લોકપ્રિય.",
-    "image": "images/fruitsflowers/mogaro.jpg"
+    "image": "images/fruitsflowers/mogaro.webp"
   },
- {
+  {
     "name": "ટગરી",
     "category": "ફળ-ફૂલ",
     "count": 2,
     "benefits": "સુગંધિત સફેદ ફૂલ; નાઈટ-બ્લૂમિંગ જાતો શાંત સુગંધ આપે.",
-    "image": "images/fruitsflowers/tagri.jpg"
+    "image": "images/fruitsflowers/tagri.webp"
   },
-{
+  {
     "name": "પારિજાત",
     "category": "ફળ-ફૂલ",
     "count": 1,
     "benefits": "સવારના સમયે ખીલતા સુગંધિત ફૂલ; શોભાવર્ધક.",
-    "image": "images/fruitsflowers/parijat.jpg"
+    "image": "images/fruitsflowers/parijat.webp"
   },
-{
+  {
     "name": "તુલસી",
     "category": "ઔષધી",
     "count": 3,
     "benefits": "ઇમ્યુનિટી સપોર્ટ; કફ-સર્દીમાં ઘરેલું ઉપયોગ.",
-    "image": "images/medicinal/tulasi.jpg"
+    "image": "images/medicinal/tulasi.webp"
   },
- {
+  {
     "name": "લેમન ગ્રાસ",
     "category": "ઔષધી",
     "count": 1,
     "benefits": "ચા માટે સુગંધિત ઘાસ; મચ્છર દૂર રાખવામાં મદદરૂપ.",
-    "image": "images/medicinal/lemangras.jpg"
+    "image": "images/medicinal/lemangras.webp"
   },
- {
+  {
     "name": "પત્થર ફૂટી",
     "category": "ઔષધી",
     "count": 8,
     "benefits": "પરંપરાગત રીતે મૂત્ર માર્ગ સંબંધિત સમસ્યામાં ઘરેલું ઉપયોગ.",
-    "image": "images/medicinal/paththarfuti.jpg"
+    "image": "images/medicinal/paththarfuti.webp"
   },
-{
+  {
     "name": "સુદર્શન",
     "category": "ઔષધી",
     "count": 1,
     "benefits": "પરંપરાગત આયુર્વેદિક મિશ્રણોમાં ઉપયોગ.",
-    "image": "images/medicinal/sudrshan.jpg"
+    "image": "images/medicinal/sudrshan.webp"
   },
- {
+  {
     "name": "અળવી",
     "category": "ઔષધી",
     "count": 1,
     "benefits": "પાચનમાં મદદરૂપ, ઘરેલું વાનગીઓમાં વિશેષ.",
-    "image": "images/medicinal/alavi.jpg"
+    "image": "images/medicinal/alavi.webp"
   },
- {
+  {
     "name": "પીંપળી",
     "category": "ઔષધી",
     "count": 2,
     "benefits": "આયુર્વેદમાં પાચન માટે પ્રસિદ્ધ; રસોઇમાં પણ વપરાય.",
-    "image": "images/medicinal/pimpali.jpg"
+    "image": "images/medicinal/pimpali.webp"
   },
- {
+  {
     "name": "અરડૂસી",
     "category": "ઔષધી",
     "count": 1,
     "benefits": "પરંપરાગત રીતે શ્વાસ સંબંધિત સમસ્યામાં કશાય તરીકે.",
-    "image": "images/medicinal/ardushi.jpg"
+    "image": "images/medicinal/ardushi.webp"
   },
- {
+  {
     "name": "શતાવરી",
     "category": "ઔષધી",
     "count": 1,
     "benefits": "આયુર્વેદિક ટોનિક તરીકે જાણીતી; તંદુરસ્તી સમર્થન.",
-    "image": "images/medicinal/satavri.jpg"
+    "image": "images/medicinal/satavri.webp"
   },
- {
+  {
     "name": "ચણોઠી",
     "category": "ઔષધી",
     "count": 1,
     "benefits": "લોકચિકિત્સામાં ઉપયોગ; ગ્રાઉન્ડ કવર તરીકે પણ.",
-    "image": "images/medicinal/chanothi.jpg"
+    "image": "images/medicinal/chanothi.webp"
   },
- {
+  {
     "name": "નગોળ",
     "category": "ઔષધી",
     "count": 1,
     "benefits": "ગરમીમાં રાહત; સ્થાનિક લોકઉપયોગમાં ઉલ્લેખિત.",
-    "image": "images/medicinal/nagol.jpg"
+    "image": "images/medicinal/nagol.webp"
   },
- {
+  {
     "name": "મીઠો લીમડો",
     "category": "ઔષધી",
     "count": 9,
     "benefits": "હળવો સુગંધિત છોડ; ઘરઆંગણે તાજગી અને જીવજંતુ ઘટાડે.",
-    "image": "images/medicinal/mitholimdo.jpg"
+    "image": "images/medicinal/mitholimdo.webp"
   }
 ];
 // ====== Data & DOM refs ======
