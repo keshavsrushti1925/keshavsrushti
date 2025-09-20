@@ -18,7 +18,7 @@ const PLANTS = [
     "category": "વેલ",
     "count": 1,
     "benefits": "ઓછા પાણીમાં ચાલે; લાંબા સમય સુધી પુષ્પિત રહે.",
-    "image": "images/vines/boganvelsafed.webp"
+    "image": "images/vines/bognvelsfed.webp"
   },
   {
     "name": "મધુમાલતી",
