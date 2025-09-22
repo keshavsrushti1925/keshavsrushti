@@ -416,6 +416,11 @@ function showRandomData() {
 }
 showRandomData();
 setInterval(showRandomData, 10000);
+
+const input = document.getElementById('search');
+input.addEventListener('click', function(e) {
+    console.log("Input box clicked — but function continues!");
+});
 // ====== Sidebar (guarded) ======
 (function () {
   const sidebar = document.getElementById('sidebar');
