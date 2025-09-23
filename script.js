@@ -419,7 +419,7 @@ setInterval(showRandomData, 10000);
 
 const input = document.getElementById('search');
 input.addEventListener('click', function(e) {
-    console.log("Input box clicked — but function continues!");
+    console.log(showRandom(null);
 });
 // ====== Sidebar (guarded) ======
 (function () {
