@@ -406,7 +406,6 @@ search && search.addEventListener('input', render);
 render();
 // ====== Random highlight (every 10s) ======
 const box = document.getElementById('randomBox');
-
 function showRandomData() {
   if (!box) return;
   const random = PLANTS[Math.floor(Math.random() * PLANTS.length)];
@@ -414,17 +413,9 @@ function showRandomData() {
     <img src="${random.image}" alt="${random.name}">
     <h3>${random.name}</h3>
   `;
-  return random; // extra: agar log karna ho to
 }
-// random start karna
 showRandomData();
-let intervalId = setInterval(showRandomData, 10000);
-
-const input = document.getElementById('search');
-input.addEventListener('click', function(e) {
-    clearInterval(intervalId); 
-});
-
+setInterval(showRandomData, 10000);
 // ====== Sidebar (guarded) ======
 (function () {
   const sidebar = document.getElementById('sidebar');
