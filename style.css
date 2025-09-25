@@ -95,7 +95,7 @@ body {
   letter-spacing: .5px;
   color :red ;
   margin-left:0px;
-   margin-left:5%;
+   margin-right:5%;
 }
 .topbar input {
   flex: 1;
