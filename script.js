@@ -25,7 +25,7 @@ const PLANTS = [
     "category": "વેલ",
     "count": 3,
     "benefits": "સાંજે સુગંધિત ફૂલો; આરકીટ/પરગોલા માટે સરસ કવર.",
-    "image": "images/vines/madhumalti.webp"
+    "image": "images/vines/madhumalati.webp"
   },
   {
     "name": "દમવેલ",
