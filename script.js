@@ -305,7 +305,7 @@ const PLANTS = [
     "category": "ઔષધી",
     "count": 2,
     "benefits": "આયુર્વેદમાં પાચન માટે પ્રસિદ્ધ; રસોઇમાં પણ વપરાય.",
-    "image": "images/medicinal/pimpali.webp"
+    "image": "images/medicinal/pipali.webp"
   },
   {
     "name": "અરડૂસી",
