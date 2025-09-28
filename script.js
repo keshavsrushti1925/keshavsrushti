@@ -413,6 +413,7 @@ function showRandomData() {
     <img src="${random.image}" alt="${random.name}">
     <h3>${random.name}</h3>
   `;
+   box.onclick = () => openModal(random);
 }
 showRandomData();
 setInterval(showRandomData, 10000);
