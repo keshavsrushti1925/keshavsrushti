@@ -499,18 +499,51 @@ search && search.addEventListener("input", render);
 
 
 // ====== Random highlight (every 10s) ======
-const box = document.getElementById('randomBox');
-function showRandomData() {
-  if (!box) return;
-  const random = PLANTS[Math.floor(Math.random() * PLANTS.length)];
-  box.innerHTML = `
-    <img src="${random.image}" alt="${random.name}">
-    <h3>${random.name}</h3>
-  `;
-   box.onclick = () => openModal(random);
-}
-showRandomData();
-setInterval(showRandomData, 10000);
+document.addEventListener('DOMContentLoaded', () => {
+  const box = document.getElementById('randomBox');
+  const search = document.getElementById('search');
+  let randomInterval = null;
+  function showRandomData() {
+    if (!box) return;
+    const random = PLANTS[Math.floor(Math.random() * PLANTS.length)];
+    box.innerHTML = `
+      <img src="${random.image}" alt="${random.name}">
+      <h3>${random.name}</h3>
+    `;
+    box.onclick = () => openModal(random);
+    box.style.display = 'block'; // make sure it's visible
+  }
+  function startRandom() {
+    if (!box) return;
+    if (!randomInterval) {
+      showRandomData();
+      randomInterval = setInterval(showRandomData, 10000);
+    }
+  }
+
+  function stopRandom() {
+    if (randomInterval) {
+      clearInterval(randomInterval);
+      randomInterval = null;
+    }
+    if (box) box.style.display = 'none'; // hide box while stopped
+  }
+
+  // Start random highlights on page load
+  startRandom();
+
+  // Stop random highlights while typing
+  search && search.addEventListener('input', () => {
+    const term = search.value.trim();
+    if (term) {
+      stopRandom(); // stop & hide box
+    } else {
+      startRandom(); // restart when input cleared
+    }
+    render(); // update search results
+  });
+});
+
 // ====== Sidebar (guarded) ======
 (function () {
   const sidebar = document.getElementById('sidebar');
