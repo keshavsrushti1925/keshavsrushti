@@ -355,6 +355,89 @@ const modalCount = document.getElementById('modalCount');
 const modalBenefits = document.getElementById('modalBenefits');
 const modalClose = document.getElementById('modalClose');
 const modalX = document.getElementById('modalX');
+
+
+// ====== search ======
+
+
+const consonants = {
+  k: "ક", g: "ગ", j: "જ", t: "ટ", d: "ડ",
+  p: "પ", b: "બ", m: "મ", n: "ન",
+  r: "ર", l: "લ", v: "વ", s: "સ",
+  h: "હ", y: "ય", ch: "ચ", kh: "ખ", ph: "ફ", bh: "ભ"
+};
+
+const vowels = {
+  a: "અ", aa: "આ", i: "ઇ", ee: "ઈ",
+  u: "ઉ", oo: "ઊ", e: "એ", ai: "ઐ",
+  o: "ઓ", au: "ઔ"
+};
+
+// Matras (vowel signs for consonants)
+const matras = {
+  a: "",   // default (no sign)
+  aa: "ા",
+  i: "િ",
+  ee: "ી",
+  u: "ુ",
+  oo: "ૂ",
+  e: "ે",
+  ai: "ૈ",
+  o: "ો",
+  au: "ૌ"
+};
+
+function convertToGujarati(text) {
+  let result = "";
+  let i = 0;
+
+  while (i < text.length) {
+    let two = text.slice(i, i+2).toLowerCase();
+    let one = text[i].toLowerCase();
+
+    // Check two-letter vowels (aa, ee, oo, ai, au)
+    if (vowels[two]) {
+      result += vowels[two];
+      i += 2;
+      continue;
+    }
+
+    // Consonant + vowel matra
+    if (consonants[one]) {
+      let next2 = text.slice(i+1, i+3).toLowerCase();
+      let next1 = text[i+1]?.toLowerCase();
+
+      if (matras[next2] !== undefined) {
+        result += consonants[one] + matras[next2];
+        i += 3;
+        continue;
+      } else if (matras[next1] !== undefined) {
+        result += consonants[one] + matras[next1];
+        i += 2;
+        continue;
+      } else {
+        // just consonant (implicit 'a')
+        result += consonants[one];
+        i++;
+        continue;
+      }
+    }
+
+    // Single vowel
+    if (vowels[one]) {
+      result += vowels[one];
+      i++;
+      continue;
+    }
+
+    // Else keep as is
+    result += text[i];
+    i++;
+  }
+
+  return result;
+}
+
 // ====== Modal ======
 function openModal(p) {
   modalImg.src = p.image;
@@ -376,12 +459,19 @@ modalClose && modalClose.addEventListener('click', closeModal);
 modalX && modalX.addEventListener('click', closeModal);
 window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 // ====== Grid Render (single source of truth) ======
+// ====== Grid Render (single source of truth) ======
 function render() {
-  const term = (search?.value || '').trim().toLowerCase();
+  const rawTerm = (search?.value || '').trim();
+  const guTerm = convertToGujarati(rawTerm); // English → Gujarati conversion
+  const term = rawTerm.toLowerCase();
+
   let data = PLANTS.filter(p =>
-    p.name.toLowerCase().includes(term) ||
-    p.category.toLowerCase().includes(term)
+    p.name.includes(guTerm) ||      // Gujarati match
+    p.category.includes(guTerm) ||  // Gujarati match
+    p.name.toLowerCase().includes(term) ||  // English (direct)
+    p.category.toLowerCase().includes(term) // English (direct)
   );
+
   // Gujarati-friendly sort
   data.sort((a, b) => a.name.localeCompare(b.name, 'gu'));
   grid.innerHTML = '';
@@ -402,8 +492,12 @@ function render() {
   const totalCount = PLANTS.reduce((s, x) => s + (Number(x.count) || 0), 0);
   stats.textContent = `કુલ જાત: ${PLANTS.length} | કુલ સંખ્યા: ${totalCount}`;
 }
-search && search.addEventListener('input', render);
+
+// ====== Initial render & Search event ======
 render();
+search && search.addEventListener("input", render);
+
+
 // ====== Random highlight (every 10s) ======
 const box = document.getElementById('randomBox');
 function showRandomData() {
@@ -448,13 +542,3 @@ setInterval(showRandomData, 10000);
 function openquery() {
           window.open("querybox.html", "_self");
 }
-
-
-
-
-
-
-
-
-
-
