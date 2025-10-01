@@ -1,641 +1,582 @@
-const PLANTS = [
-  {
-    "name": "પડદા વેલ",
-    "category": "વેલ",
-    "count": 1,
-    "benefits": "શેડિંગ માટે ઉપયોગી, પરિસરમાં હરિયાળી અને ઠંડક આપે.",
-    "image": "images/vines/padadavel.webp"
-  },
-  {
-    "name": "બોગન વેલ (ગુલાબી)",
-    "category": "વેલ",
-    "count": 4,
-    "benefits": "કાંટાદાર પણ ખૂબ ખીલતું વેલ; બાઉન્ડરી/આર્ચ માટે સુંદર દેખાવ.",
-    "image": "images/vines/boganvelgulabi.webp"
-  },
-  {
-    "name": "બોગન વેલ (સફેદ)",
-    "category": "વેલ",
-    "count": 1,
-    "benefits": "ઓછા પાણીમાં ચાલે; લાંબા સમય સુધી પુષ્પિત રહે.",
-    "image": "images/vines/bognvelsfed.webp"
-  },
-  {
-    "name": "મધુમાલતી",
-    "category": "વેલ",
-    "count": 3,
-    "benefits": "સાંજે સુગંધિત ફૂલો; આરકીટ/પરગોલા માટે સરસ કવર.",
-    "image": "images/vines/madhumalati.webp"
-  },
-  {
-    "name": "દમવેલ",
-    "category": "વેલ",
-    "count": 2,
-    "benefits": "ઝડપથી ફેલાય; દીવાલ/વાડને હરિયાળી કવર આપે.",
-    "image": "images/vines/damvel.webp"
-  },
-  {
-    "name": "નાગર વેલ",
-    "category": "વેલ",
-    "count": 2,
-    "benefits": "આભૂષણાત્મક પાંદડા; બાલ્કની/ટ્રેલિસ ડેકોર માટે.",
-    "image": "images/vines/nagarvel.webp"
-  },
-  {
-    "name": "કમાનવાળી વેલ",
-    "category": "વેલ",
-    "count": 1,
-    "benefits": "વાડ/દરવાજા ઉપર તિરપા કમાન આકારમાં ચઢાવવામાં સરળ.",
-    "image": "images/vines/kamanvalivel.webp"
-  },
-  {
-    "name": "ધનવેલ",
-    "category": "વેલ",
-    "count": 1,
-    "benefits": "ઝડપી વૃદ્ધિ; લીલું કવર અને પક્ષીઓને આશ્રય.",
-    "image": "images/vines/dhanvel.webp"
-  },
-  {
-    "name": "અપરાજિતા",
-    "category": "વેલ",
-    "count": 1,
-    "benefits": "નીલા/સફેદ ફૂલ ચા માટે વપરાય; સજાવટી અને ઔષધીય ઉપયોગ.",
-    "image": "images/vines/aprajita.webp"
-  },
-  {
-    "name": "સ્વિસ ચીઝ પ્લાન્ટ",
-    "category": "ફૂલ છોડ",
-    "count": 1,
-    "benefits": "ઇન્ડોર ડેકોર માટે લોકપ્રિય; મોટા છિદ્રવાળા પાંદડા હવામાં ભેજ વધારવામાં મદદ કરે.",
-    "image": "images/flowers/swichchisplant.webp"
-  },
-  {
-    "name": "એરો હેડ પ્લાન્ટ",
-    "category": "ફૂલ છોડ",
-    "count": 1,
-    "benefits": "ઇન્ડોર શેડ-ટોલરન્ટ; હવા શુદ્ધીકરણમાં મદદ.",
-    "image": "images/flowers/arohedplant.webp"
-  },
-  {
-    "name": "સ્નેક પ્લાન્ટ",
-    "category": "ફૂલ છોડ",
-    "count": 6,
-    "benefits": "લો-માંટેનન્સ; રાત્રે ઓક્સિજન છોડે—ઇન્ડોર એર ક્વાલિટી સુધારે.",
-    "image": "images/flowers/snekplant.webp"
-  },
-  {
-    "name": "સ્લીવિયા પ્લાન્ટ",
-    "category": "ફૂલ છોડ",
-    "count": 5,
-    "benefits": "રંગીન ફૂલોથી બગીચાને આકર્ષક બનાવે; તિતલીઓને આકર્ષે.",
-    "image": "images/flowers/sliviyaplant.webp"
-  },
-  {
-    "name": "એરિકા પામ",
-    "category": "ફૂલ છોડ",
-    "count": 1,
-    "benefits": "ઇન્ડોર પામ; વાતાવરણને તાજગી અને હ્યુમિડિટી આપે.",
-    "image": "images/flowers/arimapam.webp"
-  },
-  {
-    "name": "પોઈ",
-    "category": "ફૂલ છોડ",
-    "count": 1,
-    "benefits": "લીલા પાંદડાવાળો શાક; પોષક તત્વોથી ભરપૂર.",
-    "image": "images/flowers/poi.webp"
-  },
-  {
-    "name": "મેદી",
-    "category": "ફૂલ છોડ",
-    "count": 19,
-    "benefits": "પાન અને કોપરાંમાં રંગ; પરંપરાગત રીતે સૌંદર્ય અને ઠંડક માટે વપરાય.",
-    "image": "images/flowers/medi.webp"
-  },
-  {
-    "name": "પર્પલ હાર્ટ",
-    "category": "ફૂલ છોડ",
-    "count": 7,
-    "benefits": "જામણી પાંદડા; બોર્ડર/હેંગિંગ માટે सुंदर ગ્રાઉન્ડ કવર.",
-    "image": "images/flowers/parpalhart.webp"
-  },
-  {
-    "name": "અડુલસા",
-    "category": "ફૂલ છોડ",
-    "count": 12,
-    "benefits": "પરંપરાગત રીતે કફ-ખાંસીમાં ઘરગથ્થું ઉપયોગ; બગીચામાં ઔષધીય મૂલ્ય.",
-    "image": "images/flowers/adulasa.webp"
-  },
-  {
-    "name": "લીમડો",
-    "category": "વૃક્ષ-અન્ય",
-    "count": 4,
-    "benefits": "કુદરતી જીવાણુનાશક; છાયો આપે, પાન/નિંબોલી પરંપરાગત ઉપયોગ.",
-    "image": "images/trees/limdo.webp"
-  },
-  {
-    "name": "આસોપાલવ",
-    "category": "વૃક્ષ-અન્ય",
-    "count": 7,
-    "benefits": "ઝડપી વૃદ્ધિ; શેડ અને હરિયાળો સ્ક્રીન.",
-    "image": "images/trees/ashopalav.webp"
-  },
-  {
-    "name": "જામફળ",
-    "category": "વૃક્ષ-અન્ય",
-    "count": 1,
-    "benefits": "ફળ વિટામિન C ભરપૂર; પાંદડા પરંપરાગત દાંતસાફી માટે.",
-    "image": "images/trees/jamfal.webp"
-  },
-  {
-    "name": "આંબો",
-    "category": "વૃક્ષ-અન્ય",
-    "count": 2,
-    "benefits": "આમ્રફળ; છાયો અને પરાગણ માટે પક્ષીઓને આકર્ષે.",
-    "image": "images/trees/ambo.webp"
-  },
-  {
-    "name": "ગૂંદી",
-    "category": "વૃક્ષ-અન્ય",
-    "count": 1,
-    "benefits": "લોકલ શોભાવર્ધક ઝાડ; જીવવૈવિધ્ય માટે ઉપયોગી.",
-    "image": "images/trees/gundi.webp"
-  },
-  {
-    "name": "કણજી",
-    "category": "વૃક્ષ-અન્ય",
-    "count": 1,
-    "benefits": "ગ્રામ્ય વિસ્તારમાં સામાન્ય; છાયો અને જમીનની ધારાપકતા વધે.",
-    "image": "images/trees/kanaji.webp"
-  },
-  {
-    "name": "પાનખર ઝાડી",
-    "category": "વૃક્ષ-અન્ય",
-    "count": 1,
-    "benefits": "મોસમી પાનખરથી માટીમાં કાર્બનિક પદાર્થ વધે.",
-    "image": "images/trees/pankharjadi.webp"
-  },
-  {
-    "name": "અગાવેન અમેરિકાના",
-    "category": "વૃક્ષ-અન્ય",
-    "count": 6,
-    "benefits": "ઝેરૉસ્કેપ માટે યોગ્ય; માટી ધોવાણ રોકે, બોર્ડર માટે.",
-    "image": "images/trees/agaven.webp"
-  },
-  {
-    "name": "વાંસ",
-    "category": "વૃક્ષ-અન્ય",
-    "count": 3,
-    "benefits": "ઝડપી વૃદ્ધિ; માટી બાથું રાખે, હવા શુદ્ધીકરણ.",
-    "image": "images/trees/vans.webp"
-  },
-{
-    "name": "શેતૂર",
-    "category": "ફળ-ફૂલ",
-    "count": 3,
-    "benefits": "ફળ એન્ટીઑક્સીડન્ટોથી ભરપૂર; છાયો આપે.",
-    "image": "images/fruitsflowers/setur.webp"
-  },
-  {
-    "name": "દાડમ",
-    "category": "ફળ-ફૂલ",
-    "count": 1,
-    "benefits": "હૃદય આરોગ્ય માટે ફાયદાકારક ફળ; સુશોભન મૂલ્ય.",
-    "image": "images/fruitsflowers/dadm.webp"
-  },
-  {
-    "name": "રામ ફળી",
-    "category": "ફળ-ફૂલ",
-    "count": 3,
-    "benefits": "શાક માટે ઉપયોગી; નાઈટ્રોજન ફિક્સિંગથી માટી સુધારે.",
-    "image": "images/fruitsflowers/ramfali.webp"
-  },
-  {
-    "name": "સીતાફળી",
-    "category": "ફળ-ફૂલ",
-    "count": 2,
-    "benefits": "મીઠું ફળ; ગરમ પ્રદેશમાં સારી વૃદ્ધિ.",
-    "image": "images/fruitsflowers/sitafali.webp"
-  },
-  {
-    "name": "લીંબુ",
-    "category": "ફળ-ફૂલ",
-    "count": 5,
-    "benefits": "વિટામિન C; રસોડામાં રોજબરોજ ઉપયોગી.",
-    "image": "images/fruitsflowers/limbu.webp"
-  },
-  {
-    "name": "લવણ વલી",
-    "category": "ફળ-ફૂલ",
-    "count": 1,
-    "benefits": "માટીને આવરણ આપતું વેલ; મુલ્ચિંગ અસર.",
-    "image": "images/fruitsflowers/lavanvali.webp"
-  },
-  {
-    "name": "જાંબુ",
-    "category": "ફળ-ફૂલ",
-    "count": 3,
-    "benefits": "ફળ લોહ અને વિટામિન સભર; છાયો આપે.",
-    "image": "images/fruitsflowers/jambu.webp"
-  },
-  {
-    "name": "જાસુદ",
-    "category": "ફળ-ફૂલ",
-    "count": 12,
-    "benefits": "ફૂલ વાળની સારસંભાળમાં; તિતલીઓ/મધમાખીઓને આકર્ષે.",
-    "image": "images/fruitsflowers/jashud.webp"
-  },
-  {
-    "name": "મોગરો",
-    "category": "ફળ-ફૂલ",
-    "count": 9,
-    "benefits": "તીવ્ર સુગંધિત ફૂલ; ગાલા/હાર માટે લોકપ્રિય.",
-    "image": "images/fruitsflowers/mogaro.webp"
-  },
-  {
-    "name": "ટગરી",
-    "category": "ફળ-ફૂલ",
-    "count": 2,
-    "benefits": "સુગંધિત સફેદ ફૂલ; નાઈટ-બ્લૂમિંગ જાતો શાંત સુગંધ આપે.",
-    "image": "images/fruitsflowers/tagri.webp"
-  },
-  {
-    "name": "પારિજાત",
-    "category": "ફળ-ફૂલ",
-    "count": 1,
-    "benefits": "સવારના સમયે ખીલતા સુગંધિત ફૂલ; શોભાવર્ધક.",
-    "image": "images/fruitsflowers/parijat.webp"
-  },
-  {
-    "name": "તુલસી",
-    "category": "ઔષધી",
-    "count": 3,
-    "benefits": "ઇમ્યુનિટી સપોર્ટ; કફ-સર્દીમાં ઘરેલું ઉપયોગ.",
-    "image": "images/medicinal/tulasi.webp"
-  },
-  {
-    "name": "લેમન ગ્રાસ",
-    "category": "ઔષધી",
-    "count": 1,
-    "benefits": "ચા માટે સુગંધિત ઘાસ; મચ્છર દૂર રાખવામાં મદદરૂપ.",
-    "image": "images/medicinal/lemangras.webp"
-  },
-  {
-    "name": "પત્થર ફૂટી",
-    "category": "ઔષધી",
-    "count": 8,
-    "benefits": "પરંપરાગત રીતે મૂત્ર માર્ગ સંબંધિત સમસ્યામાં ઘરેલું ઉપયોગ.",
-    "image": "images/medicinal/paththarfuti.webp"
-  },
-  {
-    "name": "સુદર્શન",
-    "category": "ઔષધી",
-    "count": 1,
-    "benefits": "પરંપરાગત આયુર્વેદિક મિશ્રણોમાં ઉપયોગ.",
-    "image": "images/medicinal/sudrshan.webp"
-  },
-  {
-    "name": "અળવી",
-    "category": "ઔષધી",
-    "count": 1,
-    "benefits": "પાચનમાં મદદરૂપ, ઘરેલું વાનગીઓમાં વિશેષ.",
-    "image": "images/medicinal/alavi.webp"
-  },
-  {
-    "name": "પીંપળી",
-    "category": "ઔષધી",
-    "count": 2,
-    "benefits": "આયુર્વેદમાં પાચન માટે પ્રસિદ્ધ; રસોઇમાં પણ વપરાય.",
-    "image": "images/medicinal/pipali.webp"
-  },
-  {
-    "name": "અરડૂસી",
-    "category": "ઔષધી",
-    "count": 1,
-    "benefits": "પરંપરાગત રીતે શ્વાસ સંબંધિત સમસ્યામાં કશાય તરીકે.",
-    "image": "images/medicinal/ardushi.webp"
-  },
-  {
-    "name": "શતાવરી",
-    "category": "ઔષધી",
-    "count": 1,
-    "benefits": "આયુર્વેદિક ટોનિક તરીકે જાણીતી; તંદુરસ્તી સમર્થન.",
-    "image": "images/medicinal/satavri.webp"
-  },
-  {
-    "name": "ચણોઠી",
-    "category": "ઔષધી",
-    "count": 1,
-    "benefits": "લોકચિકિત્સામાં ઉપયોગ; ગ્રાઉન્ડ કવર તરીકે પણ.",
-    "image": "images/medicinal/chanothi.webp"
-  },
-  {
-    "name": "નગોળ",
-    "category": "ઔષધી",
-    "count": 1,
-    "benefits": "ગરમીમાં રાહત; સ્થાનિક લોકઉપયોગમાં ઉલ્લેખિત.",
-    "image": "images/medicinal/nagol.webp"
-  },
-  {
-    "name": "મીઠો લીમડો",
-    "category": "ઔષધી",
-    "count": 9,
-    "benefits": "હળવો સુગંધિત છોડ; ઘરઆંગણે તાજગી અને જીવજંતુ ઘટાડે.",
-    "image": "images/medicinal/mitholimdo.webp"
-  }
-];
-// ====== Data & DOM refs ======
-const grid = document.getElementById('grid');
-const search = document.getElementById('search');
-const stats = document.getElementById('stats');
-const modal = document.getElementById('modal');
-const modalImg = document.getElementById('modalImg');
-const modalTitle = document.getElementById('modalTitle');
-const modalCat = document.getElementById('modalCat');
-const modalCount = document.getElementById('modalCount');
-const modalBenefits = document.getElementById('modalBenefits');
-const modalClose = document.getElementById('modalClose');
-const modalX = document.getElementById('modalX');
-
-
-// ====== search ======
-
-
-const consonants = {
-  k: "ક", g: "ગ", j: "જ", t: "ટ", d: "ડ",
-  p: "પ", b: "બ", m: "મ", n: "ન",
-  r: "ર", l: "લ", v: "વ", s: "સ",
-  h: "હ", y: "ય", ch: "ચ", kh: "ખ", ph: "ફ", bh: "ભ"
-};
-
-const vowels = {
-  a: "અ", aa: "આ", i: "ઇ", ee: "ઈ",
-  u: "ઉ", oo: "ઊ", e: "એ", ai: "ઐ",
-  o: "ઓ", au: "ઔ"
-};
-
-// Matras (vowel signs for consonants)
-const matras = {
-  a: "",   // default (no sign)
-  aa: "ા",
-  i: "િ",
-  ee: "ી",
-  u: "ુ",
-  oo: "ૂ",
-  e: "ે",
-  ai: "ૈ",
-  o: "ો",
-  au: "ૌ"
-};
-
-function convertToGujarati(text) {
-  let result = "";
-  let i = 0;
-
-  while (i < text.length) {
-    let two = text.slice(i, i+2).toLowerCase();
-    let one = text[i].toLowerCase();
-
-    // Check two-letter vowels (aa, ee, oo, ai, au)
-    if (vowels[two]) {
-      result += vowels[two];
-      i += 2;
-      continue;
-    }
-
-    // Consonant + vowel matra
-    if (consonants[one]) {
-      let next2 = text.slice(i+1, i+3).toLowerCase();
-      let next1 = text[i+1]?.toLowerCase();
-
-      if (matras[next2] !== undefined) {
-        result += consonants[one] + matras[next2];
-        i += 3;
-        continue;
-      } else if (matras[next1] !== undefined) {
-        result += consonants[one] + matras[next1];
-        i += 2;
-        continue;
-      } else {
-        // just consonant (implicit 'a')
-        result += consonants[one];
-        i++;
-        continue;
-      }
-    }
-
-    // Single vowel
-    if (vowels[one]) {
-      result += vowels[one];
-      i++;
-      continue;
-    }
-
-    // Else keep as is
-    result += text[i];
-    i++;
-  }
-
-  return result;
-}
-
-// ====== Modal ======
-function openModal(p) {
-  modalImg.src = p.image;
-  modalTitle.textContent = p.name;
-  modalCat.textContent = `વર્ગ: ${p.category}`;
-  modalCount.textContent = `સંખ્યા: ${p.count}`;
-  modalBenefits.innerHTML = '';
-  p.benefits.split(";").forEach(point => {
-    const li = document.createElement("li");
-    li.textContent = point.trim();
-    modalBenefits.appendChild(li);
-  });
-  modal.classList.remove('hidden');
-}
-function closeModal() {
-  modal.classList.add('hidden');
-}
-modalClose && modalClose.addEventListener('click', closeModal);
-modalX && modalX.addEventListener('click', closeModal);
-window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
-// ====== Grid Render (single source of truth) ======
-// ====== Grid Render (optimized, category-wise) ======
-function render(selectedCategory = null, viewAll = false) {
-  const rawTerm = (search?.value || '').trim();
-  const guTerm = convertToGujarati(rawTerm);
-  const term = rawTerm.toLowerCase();
-
-  let data = PLANTS.filter(p =>
-    p.name.includes(guTerm) ||
-    p.category.includes(guTerm) ||
-    p.name.toLowerCase().includes(term) ||
-    p.category.toLowerCase().includes(term)
-  );
-
-  data.sort((a, b) => a.name.localeCompare(b.name, 'gu'));
-  grid.innerHTML = '';
-
-  // Group by category
-  const categories = {};
-  data.forEach(p => {
-    if (!categories[p.category]) categories[p.category] = [];
-    categories[p.category].push(p);
-  });
-
-  // Full-page view for selected category
-  if (viewAll && selectedCategory) {
-    const section = document.createElement('div');
-    section.className = 'full-page';
-    const topBar = document.createElement('div');
-    topBar.className = 'fullpage-header';
-    topBar.innerHTML = `<h1>${selectedCategory}</h1>`;
-    const closeBtn = document.createElement('button');
-    closeBtn.textContent = "Close ✕";
-    closeBtn.className = "close-btn";
-    closeBtn.addEventListener('click', () => render());
-    topBar.appendChild(closeBtn);
-    section.appendChild(topBar);
-
-    const list = document.createElement('div');
-    list.className = 'card-list full-view';
-    categories[selectedCategory].forEach(p => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <img src="${p.image}" alt="${p.name}">
-        <div class="content">
-          <div class="badge">${p.category}</div>
-          <h3>${p.name}</h3>
-          <div class="count">સંખ્યા: ${p.count}</div>
-        </div>
-      `;
-      card.addEventListener('click', () => openModal(p));
-      list.appendChild(card);
-    });
-
-    section.appendChild(list);
-    grid.appendChild(section);
-    return;
-  }
-
-  // Normal view: vertically stack multiple category sections
-  for (const cat in categories) {
-    const section = document.createElement('div');
-    section.className = 'category-section';
-
-    // Header: category + view all button
-    const header = document.createElement('div');
-    header.className = 'category-header';
-    header.innerHTML = `<h2>${cat}</h2>`;
-    const btn = document.createElement('button');
-    btn.textContent = "View All";
-    btn.className = "view-all-btn";
-    btn.addEventListener('click', () => render(cat, true));
-    header.appendChild(btn);
-    section.appendChild(header);
-
-    // Card list: horizontal scroll
-    const list = document.createElement('div');
-    list.className = 'card-list';
-    categories[cat].slice(0, 6).forEach(p => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <img src="${p.image}" alt="${p.name}">
-        <div class="content">
-          <div class="badge">${p.category}</div>
-          <h3>${p.name}</h3>
-          <div class="count">સંખ્યા: ${p.count}</div>
-        </div>
-      `;
-      card.addEventListener('click', () => openModal(p));
-      list.appendChild(card);
-    });
-
-    section.appendChild(list);
-    grid.appendChild(section); // each category section stacked vertically
-  }
-}
-
-// ====== Initial render & Search event ======
-render();
-search && search.addEventListener("input", render);
-
-
-// ====== Random highlight (every 10s) ======
-document.addEventListener('DOMContentLoaded', () => {
-  const box = document.getElementById('randomBox');
-  const search = document.getElementById('search');
-  let randomInterval = null;
-  function showRandomData() {
-    if (!box) return;
-    const random = PLANTS[Math.floor(Math.random() * PLANTS.length)];
-    box.innerHTML = `
-      <img src="${random.image}" alt="${random.name}">
-      <h3>${random.name}</h3>
-    `;
-    box.onclick = () => openModal(random);
-    box.style.display = 'block'; // make sure it's visible
-  }
-  function startRandom() {
-    if (!box) return;
-    if (!randomInterval) {
-      showRandomData();
-      randomInterval = setInterval(showRandomData, 10000);
-    }
-  }
-
-  function stopRandom() {
-    if (randomInterval) {
-      clearInterval(randomInterval);
-      randomInterval = null;
-    }
-    if (box) box.style.display = 'none'; // hide box while stopped
-  }
-
-  // Start random highlights on page load
-  startRandom();
-
-  // Stop random highlights while typing
-  search && search.addEventListener('input', () => {
-    const term = search.value.trim();
-    if (term) {
-      stopRandom(); // stop & hide box
-    } else {
-      startRandom(); // restart when input cleared
-    }
-    render(); // update search results
-  });
-});
-
-// ====== Sidebar (guarded) ======
-(function () {
-  const sidebar = document.getElementById('sidebar');
-  const openBtn = document.getElementById('hamburger');
-  const closeBtn = document.getElementById('sidebarClose');
-  const backdrop = document.getElementById('sidebarBackdrop');
-  if (!sidebar) return;
-  function openSidebar() {
-    sidebar.classList.add('open');
-    openBtn && openBtn.setAttribute('aria-expanded', 'true');
-    sidebar.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeSidebar() {
-    sidebar.classList.remove('open');
-    openBtn && openBtn.setAttribute('aria-expanded', 'false');
-    sidebar.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
-  openBtn && openBtn.addEventListener('click', openSidebar);
-  closeBtn && closeBtn.addEventListener('click', closeSidebar);
-  backdrop && backdrop.addEventListener('click', closeSidebar);
-  // Close on link click
-  sidebar.querySelectorAll('a').forEach(a => a.addEventListener('click', closeSidebar));
-  // Close on Escape
-  window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSidebar(); });
-})();
-// ====== query box ======
-function openquery() {
-          window.open("querybox.html", "_self");
-}
+                                              /* ====== Category ====== */
+                                          /* Horizontal scroll for normal view */
+                                          
+                                          .card-list {
+                                              display: flex;
+                                              gap: 1rem;
+                                              overflow-x: auto;
+                                              padding-bottom: .5rem;
+                                              scroll-snap-type: x mandatory;
+                                          }
+                                          
+                                          .card-list::-webkit-scrollbar {
+                                              height: 8px;
+                                          }
+                                          
+                                          .card-list::-webkit-scrollbar-thumb {
+                                              background: #888;
+                                              border-radius: 4px;
+                                          }
+                                          
+                                          .card-list::-webkit-scrollbar-thumb:hover {
+                                              background: #555;
+                                          }
+                                          /* Full-page view (View All) */
+                                          
+                                          .full-page .card-list.full-view {
+                                              display: grid;
+                                              grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                                              gap: 1rem;
+                                              overflow: visible;
+                                          }
+                                          
+                                          .card {
+                                              min-width: 200px;
+                                              /* For horizontal scroll cards */
+                                              background: #fff;
+                                              border-radius: 12px;
+                                              overflow: hidden;
+                                              box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                                              cursor: pointer;
+                                              flex-shrink: 0;
+                                              /* important for horizontal scroll */
+                                          }
+                                          
+                                          .card img {
+                                              width: 100%;
+                                              height: 180px;
+                                              object-fit: cover;
+                                          }
+                                          
+                                          .card .content {
+                                              padding: 8px;
+                                          }
+                                          
+                                          .card .badge {
+                                              display: inline-block;
+                                              background: green;
+                                              color: white;
+                                              font-size: 0.75rem;
+                                              padding: 2px 6px;
+                                              border-radius: 4px;
+                                              margin-bottom: 4px;
+                                          }
+                                          /* Category header */
+                                          
+                                          .category-header {
+                                              display: flex;
+                                              justify-content: space-between;
+                                              align-items: center;
+                                              margin: 1rem 0 0.5rem;
+                                              border-bottom: 2px solid #ccc;
+                                              padding-bottom: .5rem;
+                                          }
+                                          
+                                          .view-all-btn {
+                                              padding: .3rem .8rem;
+                                              background: green;
+                                              color: white;
+                                              border: none;
+                                              border-radius: 4px;
+                                              cursor: pointer;
+                                              font-size: 0.9rem;
+                                              transition: background 0.3s;
+                                          }
+                                          
+                                          .view-all-btn:hover {
+                                              background: darkgreen;
+                                          }
+                                          /* Full-page header */
+                                          
+                                          .fullpage-header {
+                                              display: flex;
+                                              justify-content: space-between;
+                                              align-items: center;
+                                              margin-bottom: 1rem;
+                                          }
+                                          
+                                          .fullpage-header h1 {
+                                              font-size: 2rem;
+                                          }
+                                          
+                                          .close-btn {
+                                              background: crimson;
+                                              color: white;
+                                              border: none;
+                                              padding: .5rem 1rem;
+                                              border-radius: 5px;
+                                              cursor: pointer;
+                                          }
+                                          
+                                          .close-btn:hover {
+                                              background: darkred;
+                                          }
+                                          /* Full-page header: title + close button inline */
+                                          
+                                          .fullpage-header {
+                                              display: flex;
+                                              justify-content: space-between;
+                                              align-items: center;
+                                              margin-bottom: 1rem;
+                                          }
+                                          
+                                          .fullpage-header h1 {
+                                              font-size: 2rem;
+                                          }
+                                          
+                                          .close-btn {
+                                              background: crimson;
+                                              color: white;
+                                              border: none;
+                                              padding: .5rem 1rem;
+                                              border-radius: 5px;
+                                              cursor: pointer;
+                                          }
+                                          
+                                          .close-btn:hover {
+                                              background: darkred;
+                                          }
+                                          /* ========== serch box ========== */
+                                          
+                                          #search {
+                                              width: 10%;
+                                          }
+                                          /* ========== query box ========== */
+                                          /* पूरा-पेज मा bottom-center fixed button */
+                                          
+                                          #queryBox {
+                                              position: fixed;
+                                              left: 90%;
+                                              transform: translateX(-50%);
+                                              bottom: 20px;
+                                              z-index: 9999;
+                                              /* visual */
+                                              padding: 12px 18px;
+                                              font-size: 20px;
+                                              border: none;
+                                              border-radius: 10px;
+                                              background: linear-gradient(180deg, #fff, #f0f0f0);
+                                              box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+                                              cursor: pointer;
+                                              transition: transform 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease;
+                                          }
+                                          /* hover effect */
+                                          
+                                          #queryBox:hover {
+                                              transform: translateX(-50%) translateY(-4px) scale(1.01);
+                                              box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+                                              opacity: 0.98;
+                                              background: #fff;
+                                              color: red;
+                                          }
+                                          /* focus (keyboard accessibility) */
+                                          
+                                          #queryBox:focus {
+                                              outline: 3px solid rgba(59, 130, 246, 0.18);
+                                              outline-offset: 4px;
+                                          }
+                                          /* responsive tweak: chhota screens par button thodu chhoto karvo */
+                                          
+                                          @media (max-width:420px) {
+                                              #queryBox {
+                                                  bottom: 14px;
+                                                  padding: 10px 14px;
+                                                  font-size: 14px;
+                                                  border-radius: 8px;
+                                              }
+                                          }
+                                          /* ==========random  box ========== */
+                                          
+                                          body {
+                                              font-family: 'Noto Sans Gujarati', sans-serif;
+                                              background: #f6f7fb;
+                                          }
+                                          
+                                          .random-box {
+                                              width: 100%;
+                                              margin: 40px auto;
+                                              padding: 5px;
+                                              border-radius: 12px;
+                                              background: #B8860B;
+                                              box-shadow: 0 4px 12px rgba(0, 0, 0, .1);
+                                              text-align: center;
+                                              transition: all .5s ease;
+                                          }
+                                          
+                                          .random-box img {
+                                              width: 100%;
+                                              height: 350px;
+                                              object-fit: cover;
+                                              border-radius: 10px;
+                                          }
+                                          
+                                          .random-box h3 {
+                                              margin: 10px 0 5px;
+                                              font-size: 18px;
+                                          }
+                                          
+                                          .random-box p {
+                                              font-size: 14px;
+                                              color: #555;
+                                          }
+                                          /* ========== Global Reset ========== */
+                                          
+                                          * {
+                                              box-sizing: border-box;
+                                              margin: 0;
+                                              padding: 0;
+                                          }
+                                          
+                                          body {
+                                              font-family: 'Noto Sans Gujarati', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+                                              background: #fdf6e3;
+                                              color: #111;
+                                              line-height: 1.5;
+                                          }
+                                          /* ========== Topbar ========== */
+                                          
+                                          .topbar {
+                                              position: sticky;
+                                              top: 0;
+                                              z-index: 10;
+                                              padding: 16px;
+                                              display: flex;
+                                              gap: 12px;
+                                              align-items: center;
+                                              justify-content: space-between;
+                                              background: black;
+                                              backdrop-filter: blur(6px);
+                                              border-bottom: 1px solid #e5e7eb;
+                                          }
+                                          
+                                          .topbar h1 {
+                                              font-size: 24px;
+                                              font-weight: 800;
+                                              letter-spacing: .5px;
+                                              color: red;
+                                              margin-left: 0px;
+                                              margin-right: 5%;
+                                          }
+                                          
+                                          .topbar input {
+                                              flex: 1;
+                                              max-width: 250px;
+                                              padding: 10px 12px;
+                                              border: 1px solid #d1d5db;
+                                              border-radius: 12px;
+                                              outline: none;
+                                              font-size: 15px;
+                                          }
+                                          
+                                          .topbar input:focus {
+                                              border-color: #8b5cf6;
+                                              box-shadow: 0 0 0 3px rgba(139, 92, 246, .15);
+                                          }
+                                          /* ========== Stats ========== */
+                                          
+                                          .stats {
+                                              padding: 12px 18px;
+                                              color: #374151;
+                                              font-size: 14px;
+                                              font-weight: 600;
+                                          }
+                                          /* ========== Grid ========== */
+                                          
+                                          .grid {
+                                              display: grid;
+                                              grid-template-columns: repeat(auto-fill, minmax(100%, 5fr));
+                                              gap: 16px;
+                                              padding: 16px;
+                                          }
+                                          /* ========== Card ========== */
+                                          
+                                          .card {
+                                              background: #B8860B;
+                                              border: 1px solid #e5e7eb;
+                                              border-radius: 16px;
+                                              overflow: hidden;
+                                              cursor: pointer;
+                                              transition: transform .1s ease, box-shadow .15s ease;
+                                          }
+                                          
+                                          .card:hover {
+                                              transform: translateY(-3px);
+                                              box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+                                          }
+                                          
+                                          .card img {
+                                              width: 100%;
+                                              height: 160px;
+                                              object-fit: cover;
+                                              background: #f1f5f9;
+                                          }
+                                          
+                                          .card .content {
+                                              padding: 12px;
+                                          }
+                                          
+                                          .card h3 {
+                                              margin: 8px 0 6px 0;
+                                              font-size: 16px;
+                                              font-weight: 600;
+                                          }
+                                          /* ========== Badge, Count, Benefits ========== */
+                                          
+                                          .badge {
+                                              display: inline-block;
+                                              padding: 4px 10px;
+                                              border-radius: 999px;
+                                              background: #eef2ff;
+                                              border: 1px solid #c7d2fe;
+                                              font-size: 12px;
+                                              font-weight: 500;
+                                          }
+                                          
+                                          .count {
+                                              font-weight: 700;
+                                              margin-top: 6px;
+                                              color: #334155;
+                                              font-size: 14px;
+                                          }
+                                          
+                                          .benefits {
+                                              font-size: 14px;
+                                              line-height: 1.6;
+                                              color: #374151;
+                                              margin-top: 6px;
+                                          }
+                                          /* ========== Modal ========== */
+                                          
+                                          .modal.hidden {
+                                              display: none;
+                                          }
+                                          
+                                          .modal {
+                                              position: fixed;
+                                              inset: 0;
+                                              display: grid;
+                                              place-items: center;
+                                          }
+                                          
+                                          .modal-backdrop {
+                                              position: absolute;
+                                              inset: 0;
+                                              background: rgba(0, 0, 0, .4);
+                                          }
+                                          
+                                          .modal-card {
+                                              position: relative;
+                                              z-index: 1;
+                                              width: min(900px, 92vw);
+                                              background: #fff;
+                                              border-radius: 18px;
+                                              overflow: hidden;
+                                              border: 1px solid #e5e7eb;
+                                              box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
+                                              animation: fadeIn .25s ease;
+                                          }
+                                          
+                                          .modal-card img {
+                                              width: 100%;
+                                              height: 420px;
+                                              object-fit: cover;
+                                              background: #f1f5f9;
+                                          }
+                                          
+                                          .modal-body {
+                                              padding: 18px 20px;
+                                          }
+                                          
+                                          .modal-body h2 {
+                                              margin: 4px 0 8px 0;
+                                              font-size: 22px;
+                                              font-weight: 700;
+                                          }
+                                          
+                                          .modal-body .meta {
+                                              color: #475569;
+                                              margin-bottom: 10px;
+                                              font-size: 14px;
+                                          }
+                                          /* ========== Close Button ========== */
+                                          
+                                          .close {
+                                              position: absolute;
+                                              top: 10px;
+                                              right: 12px;
+                                              border: none;
+                                              background: #ffffffcc;
+                                              border-radius: 10px;
+                                              width: 36px;
+                                              height: 36px;
+                                              font-size: 22px;
+                                              cursor: pointer;
+                                              line-height: 1;
+                                              transition: background .2s;
+                                          }
+                                          
+                                          .close:hover {
+                                              background: #fff;
+                                          }
+                                          /* ========== Footer ========== */
+                                          
+                                          .footer {
+                                              padding: 18px;
+                                              text-align: center;
+                                              color: #6b7280;
+                                              font-size: 14px;
+                                              border-top: 1px solid #e5e7eb;
+                                              margin-top: 20px;
+                                          }
+                                          /* ========== Animations ========== */
+                                          
+                                          @keyframes fadeIn {
+                                              from {
+                                                  opacity: 0;
+                                                  transform: translateY(8px);
+                                              }
+                                              to {
+                                                  opacity: 1;
+                                                  transform: translateY(0);
+                                              }
+                                          }
+                                          /* =======================
+      Responsive Nav (Mobile sidebar + Desktop inline)
+      ======================= */
+                                          
+                                          .hamburger {
+                                              display: none;
+                                              color: white;
+                                              align-items: center;
+                                              justify-content: center;
+                                              width: 40px;
+                                              height: 40px;
+                                              font-size: 22px;
+                                              border-radius: 10px;
+                                              background: black;
+                                              cursor: pointer;
+                                              transition: transform .1s ease, box-shadow .15s ease;
+                                          }
+                                          
+                                          .hamburger:active {
+                                              transform: scale(0.98);
+                                          }
+                                          
+                                          .nav-buttons {
+                                              display: flex;
+                                              gap: 10px;
+                                              flex-wrap: wrap;
+                                              margin-left: auto;
+                                              margin-right: 12px;
+                                          }
+                                          
+                                          .nav-buttons a {
+                                              flex: 1;
+                                              min-width: 90px;
+                                              padding: 8px 14px;
+                                              text-align: center;
+                                              text-decoration: none;
+                                              background: #fff;
+                                              border: 1px solid #ddd;
+                                              border-radius: 12px;
+                                              font-size: 14px;
+                                              font-weight: 600;
+                                              color: #333;
+                                              transition: all .25s ease;
+                                          }
+                                          
+                                          .nav-buttons a:hover {
+                                              background: #8b5cf6;
+                                              color: #fff;
+                                              border-color: #8b5cf6;
+                                              transform: translateY(-3px);
+                                              box-shadow: 0 4px 10px rgba(0, 0, 0, .15);
+                                          }
+                                          /* Sidebar base (hidden by default) */
+                                          
+                                          .sidebar {
+                                              position: fixed;
+                                              inset: 0;
+                                              z-index: 40;
+                                              display: none;
+                                              /* hidden by default */
+                                          }
+                                          
+                                          .sidebar.open {
+                                              display: block;
+                                          }
+                                          
+                                          .sidebar-backdrop {
+                                              position: absolute;
+                                              inset: 0;
+                                              background: rgba(0, 0, 0, .45);
+                                          }
+                                          
+                                          .sidebar-panel {
+                                              position: absolute;
+                                              top: 0;
+                                              bottom: 0;
+                                              left: 0;
+                                              width: min(84vw, 320px);
+                                              background: #fff;
+                                              border-right: 1px solid #e5e7eb;
+                                              transform: translateX(-100%);
+                                              transition: transform .25s ease;
+                                              display: flex;
+                                              flex-direction: column;
+                                          }
+                                          
+                                          .sidebar.open .sidebar-panel {
+                                              transform: translateX(0);
+                                          }
+                                          
+                                          .sidebar-head {
+                                              display: flex;
+                                              align-items: center;
+                                              justify-content: space-between;
+                                              padding: 14px 16px;
+                                              border-bottom: 1px solid #e5e7eb;
+                                              font-weight: 700;
+                                          }
+                                          
+                                          .sidebar-close {
+                                              width: 36px;
+                                              height: 36px;
+                                              border: none;
+                                              border-radius: 10px;
+                                              background: #f3f4f6;
+                                              font-size: 22px;
+                                              cursor: pointer;
+                                          }
+                                          
+                                          .sidebar-links {
+                                              display: grid;
+                                              gap: 8px;
+                                              padding: 12px;
+                                          }
+                                          
+                                          .sidebar-links a {
+                                              display: block;
+                                              padding: 10px 12px;
+                                              border: 1px solid #e5e7eb;
+                                              border-radius: 12px;
+                                              text-decoration: none;
+                                              color: #333;
+                                              font-weight: 600;
+                                              transition: background .2s ease, color .2s ease, transform .1s ease;
+                                          }
+                                          
+                                          .sidebar-links a:hover {
+                                              background: #f5f3ff;
+                                              color: #4c1d95;
+                                              transform: translateY(-1px);
+                                          }
+                                          /* Show hamburger on small screens, hide desktop nav */
+                                          
+                                          @media (max-width: 768px) {
+                                              .hamburger {
+                                                  display: inline-flex;
+                                              }
+                                              .nav-buttons {
+                                                  display: none;
+                                              }
