@@ -459,38 +459,102 @@ modalClose && modalClose.addEventListener('click', closeModal);
 modalX && modalX.addEventListener('click', closeModal);
 window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 // ====== Grid Render (single source of truth) ======
-// ====== Grid Render (single source of truth) ======
-function render() {
+// ====== Grid Render (optimized, category-wise) ======
+function render(selectedCategory = null, viewAll = false) {
   const rawTerm = (search?.value || '').trim();
-  const guTerm = convertToGujarati(rawTerm); // English → Gujarati conversion
+  const guTerm = convertToGujarati(rawTerm);
   const term = rawTerm.toLowerCase();
 
   let data = PLANTS.filter(p =>
-    p.name.includes(guTerm) ||      // Gujarati match
-    p.category.includes(guTerm) ||  // Gujarati match
-    p.name.toLowerCase().includes(term) ||  // English (direct)
-    p.category.toLowerCase().includes(term) // English (direct)
+    p.name.includes(guTerm) ||
+    p.category.includes(guTerm) ||
+    p.name.toLowerCase().includes(term) ||
+    p.category.toLowerCase().includes(term)
   );
 
-  // Gujarati-friendly sort
   data.sort((a, b) => a.name.localeCompare(b.name, 'gu'));
   grid.innerHTML = '';
-  for (const p of data) {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <img src="${p.image}" alt="${p.name}">
-      <div class="content">
-        <div class="badge">${p.category}</div>
-        <h3>${p.name}</h3>
-        <div class="count">સંખ્યા: ${p.count}</div>
-      </div>
-    `;
-    card.addEventListener('click', () => openModal(p));
-    grid.appendChild(card);
+
+  // Group by category
+  const categories = {};
+  data.forEach(p => {
+    if (!categories[p.category]) categories[p.category] = [];
+    categories[p.category].push(p);
+  });
+
+  // Full-page view for selected category
+  if (viewAll && selectedCategory) {
+    const section = document.createElement('div');
+    section.className = 'full-page';
+    const topBar = document.createElement('div');
+    topBar.className = 'fullpage-header';
+    topBar.innerHTML = `<h1>${selectedCategory}</h1>`;
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = "Close ✕";
+    closeBtn.className = "close-btn";
+    closeBtn.addEventListener('click', () => render());
+    topBar.appendChild(closeBtn);
+    section.appendChild(topBar);
+
+    const list = document.createElement('div');
+    list.className = 'card-list full-view';
+    categories[selectedCategory].forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <img src="${p.image}" alt="${p.name}">
+        <div class="content">
+          <div class="badge">${p.category}</div>
+          <h3>${p.name}</h3>
+          <div class="count">સંખ્યા: ${p.count}</div>
+        </div>
+      `;
+      card.addEventListener('click', () => openModal(p));
+      list.appendChild(card);
+    });
+
+    section.appendChild(list);
+    grid.appendChild(section);
+    return;
   }
-  const totalCount = PLANTS.reduce((s, x) => s + (Number(x.count) || 0), 0);
-  stats.textContent = `કુલ જાત: ${PLANTS.length} | કુલ સંખ્યા: ${totalCount}`;
+
+  // Normal view: vertically stack multiple category sections
+  for (const cat in categories) {
+    const section = document.createElement('div');
+    section.className = 'category-section';
+
+    // Header: category + view all button
+    const header = document.createElement('div');
+    header.className = 'category-header';
+    header.innerHTML = `<h2>${cat}</h2>`;
+    const btn = document.createElement('button');
+    btn.textContent = "View All";
+    btn.className = "view-all-btn";
+    btn.addEventListener('click', () => render(cat, true));
+    header.appendChild(btn);
+    section.appendChild(header);
+
+    // Card list: horizontal scroll
+    const list = document.createElement('div');
+    list.className = 'card-list';
+    categories[cat].slice(0, 6).forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <img src="${p.image}" alt="${p.name}">
+        <div class="content">
+          <div class="badge">${p.category}</div>
+          <h3>${p.name}</h3>
+          <div class="count">સંખ્યા: ${p.count}</div>
+        </div>
+      `;
+      card.addEventListener('click', () => openModal(p));
+      list.appendChild(card);
+    });
+
+    section.appendChild(list);
+    grid.appendChild(section); // each category section stacked vertically
+  }
 }
 
 // ====== Initial render & Search event ======
