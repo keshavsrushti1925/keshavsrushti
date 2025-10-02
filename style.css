@@ -31,7 +31,7 @@
                                           }
                                           
                                           .card {
-                                              min-width: 200px;
+                                              min-width: 250px;
                                               /* For horizontal scroll cards */
                                               background: #fff;
                                               border-radius: 12px;
