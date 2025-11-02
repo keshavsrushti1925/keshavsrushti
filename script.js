@@ -179,7 +179,7 @@ const PLANTS = [
     "category": "વૃક્ષ-અન્ય",
     "count": 6,
     "benefits": "ઝેરૉસ્કેપ માટે યોગ્ય; માટી ધોવાણ રોકે, બોર્ડર માટે.",
-    "image": "images/trees/agaven.webp"
+    "image": "images/trees/agavenamerikana.webp"
   },
   {
     "name": "વાંસ",
