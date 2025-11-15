@@ -541,7 +541,7 @@ function render(selectedCategory = null, viewAll = false) {
       const card = document.createElement('div');
       card.className = 'card';
       card.innerHTML = `
-        <img src="${p.image} alt="${p.name}">
+        <img src="${p.image}" alt="${p.name}">
         <div class="content">
           <div class="badge">${p.category}</div>
           <h3>${p.name}</h3>
