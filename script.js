@@ -361,15 +361,15 @@ const modalX = document.getElementById('modalX');
 
 
 const consonants = {
-  k: "ક", g: "ગ", j: "જ", t: "ટ", d: "ડ",
+  k: "ક", g: "ગ", j: "જ", t: "ટ", d: "ડ",t: "ત",
   p: "પ", b: "બ", m: "મ", n: "ન",
   r: "ર", l: "લ", v: "વ", s: "સ",
   h: "હ", y: "ય", ch: "ચ", kh: "ખ", ph: "ફ", bh: "ભ"
 };
 
 const vowels = {
-  a: "અ", aa: "આ", i: "ઇ", ee: "ઈ",
-  u: "ઉ", oo: "ઊ", e: "એ", ai: "ઐ",
+  a: "અ", aa: "આ", i: "ઇ", ee: "ઈ", i: "ઈ", ee: "ઇ",
+  u: "ઉ", oo: "ઊ",u: "ઊ", oo: "ઉ", e: "એ", ai: "ઐ",
   o: "ઓ", au: "ઔ"
 };
 
@@ -379,6 +379,8 @@ const matras = {
   aa: "ા",
   i: "િ",
   ee: "ી",
+  i: "ી",
+  ee: "િ",
   u: "ુ",
   oo: "ૂ",
   e: "ે",
