@@ -119,11 +119,11 @@ const PLANTS = [
     "image": "images/flowers/parpalhart.webp"
   },
   {
-    "name": "અડુલસા",
+    "name": "એનાસ્ટેશિયા વેરીગેટા",
     "category": "ફૂલ છોડ",
     "count": 12,
     "benefits": "પરંપરાગત રીતે કફ-ખાંસીમાં ઘરગથ્થું ઉપયોગ; બગીચામાં ઔષધીય મૂલ્ય.",
-    "image": "images/flowers/adulasa.webp"
+    "image": "images/flowers/anastasiavariegata.webp"
   },
   {
     "name": "લીમડો",
