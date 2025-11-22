@@ -319,7 +319,7 @@ const PLANTS = [
     "category": "ઔષધી",
     "count": 1,
     "benefits": "આયુર્વેદિક ટોનિક તરીકે જાણીતી; તંદુરસ્તી સમર્થન.",
-    "image": "images/medicinal/satavri.webp"
+    "image": "images/medicinal/satavari.webp"
   },
   {
     "name": "ચણોઠી",
