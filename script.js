@@ -46,7 +46,7 @@ const PLANTS = [
     "category": "વેલ",
     "count": 1,
     "benefits": "વાડ/દરવાજા ઉપર તિરપા કમાન આકારમાં ચઢાવવામાં સરળ.",
-    "image": "images/vines/kamanvalivel.webp"
+    "image": "images/vines/kmanvalivel.webp"
   },
   {
     "name": "ધનવેલ",
