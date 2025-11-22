@@ -212,14 +212,14 @@ const PLANTS = [
   {
     "name": "લીંબુ",
     "category": "ફળ-ફૂલ",
-    "count": 5,
+    "count": 4,
     "benefits": "વિટામિન C; રસોડામાં રોજબરોજ ઉપયોગી.",
     "image": "images/fruitsflowers/limbuc.webp"
   },
    {
     "name": "મોસંબી",
     "category": "ફળ-ફૂલ",
-    "count": 5,
+    "count": 1,
     "benefits": "વિટામિન C; રસોડામાં રોજબરોજ ઉપયોગી.",
     "image": "images/fruitsflowers/limbu.webp"
   },
