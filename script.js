@@ -84,13 +84,6 @@ const PLANTS = [
     "image": "images/flowers/snekplant.webp"
   },
   {
-    "name": "સ્લીવિયા પ્લાન્ટ",
-    "category": "ફૂલ છોડ",
-    "count": 5,
-    "benefits": "રંગીન ફૂલોથી બગીચાને આકર્ષક બનાવે; તિતલીઓને આકર્ષે.",
-    "image": "images/flowers/sliviyaplant.webp"
-  },
-  {
     "name": "એરિકા પામ",
     "category": "ફૂલ છોડ",
     "count": 1,
