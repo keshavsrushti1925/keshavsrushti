@@ -67,7 +67,7 @@ const PLANTS = [
     "category": "ફૂલ છોડ",
     "count": 1,
     "benefits": "ઇન્ડોર ડેકોર માટે લોકપ્રિય; મોટા છિદ્રવાળા પાંદડા હવામાં ભેજ વધારવામાં મદદ કરે.",
-    "image": "images/flowers/swichchisplant.webp"
+    "image": "images/flowers/swichchishplant.webp"
   },
   {
     "name": "એરો હેડ પ્લાન્ટ",
