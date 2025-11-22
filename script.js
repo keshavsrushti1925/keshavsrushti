@@ -214,7 +214,7 @@ const PLANTS = [
     "category": "ફળ-ફૂલ",
     "count": 2,
     "benefits": "મીઠું ફળ; ગરમ પ્રદેશમાં સારી વૃદ્ધિ.",
-    "image": "images/fruitsflowers/sitafali.webp"
+    "image": "images/fruitsflowers/sitqafali.webp"
   },
   {
     "name": "લીંબુ",
