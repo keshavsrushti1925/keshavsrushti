@@ -1,38 +1,22 @@
 <!DOCTYPE html>
-<html>
-<link src="https://keshavsrushti1925.github.io/keshavsrushti/script.js"></link>
-    <script src="https://keshavsrushti1925.github.io/keshavsrushti/script.js"></script>
+<html lang="gu">
 <head>
-    <title>Image Compare</title>
-    <style>
-        .preview {
-            width: 200px;
-            margin: 10px;
-        }
-        
-        .match-box {
-            padding: 10px;
-            margin-top: 20px;
-            border: 2px solid #333;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Image Match Search</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <h2>User Camera Image Compare</h2>
+<h2>છબી મૅચ સર્ચ</h2>
 
-    <input type="file" accept="image/*" id="inputImage" capture="camera">
+<input type="file" id="imgInput" accept="image/*">
+<button id="searchBtn">Search Image</button>
 
-    <br><br>
-    <img id="userImg" class="preview">
-  
-    <div id="result" class="match-box">અહીં result આવશે…</div>
+<div id="results"></div>
 
-   
+<script src="plants.js"></script>
+<script src="script.js"></script>
 
 </body>
-
 </html>
-
-
