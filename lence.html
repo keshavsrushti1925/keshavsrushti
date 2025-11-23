@@ -387,22 +387,102 @@ body {
     "image": "images/medicinal/mitholimdo.webp"
   }
 ];
-  const input = document.getElementById("imgInput");
+
+// ---- Utility: load image as bitmap ----
+function loadImageBitmap(src) {
+  return fetch(src)
+    .then(r => r.blob())
+    .then(createImageBitmap);
+}
+
+// ---- Convert image → 8×8 average color fingerprint ----
+async function getFingerprint(imgBitmap) {
+  const size = 64; // small downsized image
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+
+  ctx.drawImage(imgBitmap, 0, 0, size, size);
+  const data = ctx.getImageData(0, 0, size, size).data;
+
+  const grid = 8;
+  const block = size / grid;
+  const result = [];
+
+  for (let y = 0; y < grid; y++) {
+    for (let x = 0; x < grid; x++) {
+      let r = 0, g = 0, b = 0, count = 0;
+
+      for (let j = 0; j < block; j++) {
+        for (let i = 0; i < block; i++) {
+          const px = ((y * block + j) * size + (x * block + i)) * 4;
+          r += data[px];
+          g += data[px + 1];
+          b += data[px + 2];
+          count++;
+        }
+      }
+      result.push([r / count, g / count, b / count]);
+    }
+  }
+
+  return result;
+}
+
+// ---- Compare fingerprints ----
+function compare(fp1, fp2) {
+  let score = 0;
+  for (let i = 0; i < fp1.length; i++) {
+    const [r1, g1, b1] = fp1[i];
+    const [r2, g2, b2] = fp2[i];
+
+    const diff = Math.sqrt(
+      (r1 - r2) ** 2 +
+      (g1 - g2) ** 2 +
+      (b1 - b2) ** 2
+    );
+
+    const maxDiff = Math.sqrt(255**2 * 3); // max color distance
+    const sim = 1 - diff / maxDiff;        // similarity 0–1
+    
+    score += sim;
+  }
+
+  return (score / fp1.length) * 100; // percentage
+}
+
+const input = document.getElementById("imgInput");
 const btn = document.getElementById("searchBtn");
 const results = document.getElementById("results");
 
-btn.addEventListener("click", () => {
+btn.addEventListener("click", async () => {
   if (!input.files.length) {
     alert("સૌ પ્રથમ એક છબી પસંદ કરો");
     return;
   }
 
-  const fileName = input.files[0].name.toLowerCase();
+  results.innerHTML = "<h3>⏳ મૅચ શોધાઈ રહ્યું છે...</h3>";
 
-  // find matches
-  const matches = PLANTS.filter(p =>
-    p.image.toLowerCase().includes(fileName)
-  );
+  const file = input.files[0];
+  const userBmp = await createImageBitmap(file);
+  const userFP = await getFingerprint(userBmp);
+
+  let matches = [];
+
+  for (let p of PLANTS) {
+    try {
+      const plantBmp = await loadImageBitmap(p.image);
+      const plantFP = await getFingerprint(plantBmp);
+      const similarity = compare(userFP, plantFP);
+
+      if (similarity >= 70) {   // threshold
+        matches.push({ ...p, similarity });
+      }
+    } catch (e) {
+      console.log("Image load failed:", p.image);
+    }
+  }
 
   showResults(matches);
 });
@@ -415,23 +495,25 @@ function showResults(list) {
     return;
   }
 
+  list.sort((a, b) => b.similarity - a.similarity);
+
   list.forEach(p => {
     const c = document.createElement("div");
     c.className = "card";
     c.innerHTML = `
       <img src="${p.image}">
       <h4>${p.name}</h4>
+      <p>Similarity: ${p.similarity.toFixed(1)}%</p>
       <p>વર્ગ: ${p.category}</p>
       <p>સંખ્યા: ${p.count}</p>
     `;
     results.appendChild(c);
   });
 }
-
 </script>
-
 </body>
 </html>
+
 
 
 
