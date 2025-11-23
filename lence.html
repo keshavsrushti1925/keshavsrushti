@@ -42,9 +42,52 @@ body {
 <div id="results"></div>
 
 <script src="https://keshavsrushti1925.github.io/keshavsrushti/script.js"></script>
-<script src="script.js"></script>
+<script>
+  const input = document.getElementById("imgInput");
+const btn = document.getElementById("searchBtn");
+const results = document.getElementById("results");
+
+btn.addEventListener("click", () => {
+  if (!input.files.length) {
+    alert("સૌ પ્રથમ એક છબી પસંદ કરો");
+    return;
+  }
+
+  const fileName = input.files[0].name.toLowerCase();
+
+  // find matches
+  const matches = PLANTS.filter(p =>
+    p.image.toLowerCase().includes(fileName)
+  );
+
+  showResults(matches);
+});
+
+function showResults(list) {
+  results.innerHTML = "";
+
+  if (!list.length) {
+    results.innerHTML = "<h3>❌ કોઈ મૅચ મળ્યો નથી</h3>";
+    return;
+  }
+
+  list.forEach(p => {
+    const c = document.createElement("div");
+    c.className = "card";
+    c.innerHTML = `
+      <img src="${p.image}">
+      <h4>${p.name}</h4>
+      <p>વર્ગ: ${p.category}</p>
+      <p>સંખ્યા: ${p.count}</p>
+    `;
+    results.appendChild(c);
+  });
+}
+
+</script>
 
 </body>
 </html>
+
 
 
