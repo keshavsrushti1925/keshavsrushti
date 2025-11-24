@@ -42,6 +42,53 @@ body {
 <div id="results"></div>
 <script src="plants.js"></script>
 <script>
+  async function getFingerprint(imgBitmap) {
+  const size = 128; 
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+
+  ctx.drawImage(imgBitmap, 0, 0, size, size);
+  const imgData = ctx.getImageData(0, 0, size, size).data;
+
+  const colorFP = [];
+  const gray = [];
+
+  // ---- Color + Grayscale extract ----
+  for (let i = 0; i < imgData.length; i += 4) {
+    const r = imgData[i];
+    const g = imgData[i + 1];
+    const b = imgData[i + 2];
+
+    colorFP.push([r, g, b]);
+    gray.push((r + g + b) / 3);
+  }
+
+  // ---- Texture / Edge detection (simple Sobel) ----
+  const textureFP = [];
+  const w = size;
+
+  for (let y = 1; y < size - 1; y++) {
+    for (let x = 1; x < size - 1; x++) {
+      const i = y * w + x;
+
+      const gx =
+        -gray[i - w - 1] - 2 * gray[i - 1] - gray[i + w - 1] +
+         gray[i - w + 1] + 2 * gray[i + 1] + gray[i + w + 1];
+
+      const gy =
+        -gray[i - w - 1] - 2 * gray[i - w] - gray[i - w + 1] +
+         gray[i + w - 1] + 2 * gray[i + w] + gray[i + w + 1];
+
+      const edge = Math.sqrt(gx * gx + gy * gy);
+      textureFP.push(edge);
+    }
+  }
+
+  return { colorFP, textureFP };
+}
+/*
 // ---- Utility: load image as bitmap ----
 function loadImageBitmap(src) {
   return fetch(src)
@@ -167,6 +214,7 @@ function showResults(list) {
 </script>
 </body>
 </html>
+
 
 
 
