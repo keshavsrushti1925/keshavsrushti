@@ -387,7 +387,34 @@ body {
     "image": "images/medicinal/mitholimdo.webp"
   }
 ];
+async function findMatch(uploadedImgURL) {
+    const uploadSig = await getImageSignature(uploadedImgURL);
 
+    let bestMatch = null;
+
+    for (const plant of PLANTS) {
+        const plantSig = await getImageSignature(plant.image);
+
+        const percent = compareSignatures(uploadSig, plantSig);
+        console.log(plant.name, percent.toFixed(2) + "%");
+
+        if (percent >= 90) {
+            bestMatch = { plant, percent };
+            break;
+        }
+    }
+
+    if (bestMatch) {
+        document.getElementById("match-result").innerHTML =
+            `<h3>${bestMatch.plant.name}</h3>
+             <p>Similarity: ${bestMatch.percent.toFixed(1)}%</p>
+             <img src="${bestMatch.plant.image}" width="200">`;
+    } else {
+        document.getElementById("match-result").innerHTML =
+            "<p>No match above 90% similarity</p>";
+    }
+}
+/*
 // ---- Utility: load image as bitmap ----
 function loadImageBitmap(src) {
   return fetch(src)
@@ -509,10 +536,11 @@ function showResults(list) {
     `;
     results.appendChild(c);
   });
-}
+}  */
 </script>
 </body>
 </html>
+
 
 
 
