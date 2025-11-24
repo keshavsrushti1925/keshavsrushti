@@ -125,9 +125,10 @@ body {
 }
 
 
-if (similarity >= 68) {
+if (!isNaN(similarity) && similarity >= 68) {
   matches.push({ ...p, similarity });
 }
+
 
   
 /*
@@ -256,6 +257,7 @@ function showResults(list) {
 </script>
 </body>
 </html>
+
 
 
 
