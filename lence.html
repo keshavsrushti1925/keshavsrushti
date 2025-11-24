@@ -88,6 +88,45 @@ body {
 
   return { colorFP, textureFP };
 }
+
+
+  function compare(fp1, fp2) {
+  let colorScore = 0;
+  let textureScore = 0;
+
+  const maxColorDist = Math.sqrt(255 ** 2 * 3);
+
+  for (let i = 0; i < fp1.colorFP.length; i++) {
+    const [r1, g1, b1] = fp1.colorFP[i];
+    const [r2, g2, b2] = fp2.colorFP[i];
+
+    const diff = Math.sqrt(
+      (r1 - r2) ** 2 +
+      (g1 - g2) ** 2 +
+      (b1 - b2) ** 2
+    );
+
+    colorScore += 1 - diff / maxColorDist;
+  }
+
+  colorScore = colorScore / fp1.colorFP.length * 100;
+
+  // --- Texture similarity ---
+  let tDiff = 0;
+  for (let i = 0; i < fp1.textureFP.length; i++) {
+    tDiff += Math.abs(fp1.textureFP[i] - fp2.textureFP[i]);
+  }
+
+  const maxTex = 255 * fp1.textureFP.length;
+  textureScore = (1 - tDiff / maxTex) * 100;
+
+  // Weighted average → MORE ACCURATE RESULTS
+  return colorScore * 0.7 + textureScore * 0.3;
+}
+
+
+
+  
 /*
 // ---- Utility: load image as bitmap ----
 function loadImageBitmap(src) {
@@ -214,6 +253,7 @@ function showResults(list) {
 </script>
 </body>
 </html>
+
 
 
 
