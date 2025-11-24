@@ -1,263 +1,166 @@
 <!DOCTYPE html>
 <html lang="gu">
 <head>
-  <meta charset="utf-8" />
-  <title>Site Camera + Lens-style Search (Top 5 matches)</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <style>
-    body { font-family: system-ui, sans-serif; margin: 16px; }
-    .row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
-    video { width:320px; height:240px; background:#000; border-radius:8px; }
-    canvas { display:none; }
-    #previewImg { width:200px; height:150px; object-fit:cover; border:1px solid #ddd; border-radius:6px; }
-    .controls { display:flex; gap:8px; flex-direction:column; }
-    button { padding:8px 12px; border-radius:6px; cursor:pointer; }
-    input[type=file] { padding:6px; }
-    #results { margin-top:16px; display:grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap:12px; }
-    .card { border:1px solid #e0e0e0; padding:8px; border-radius:8px; box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
-    .thumb { width:100%; height:140px; object-fit:cover; border-radius:6px; }
-    .meta { margin-top:6px; font-size:14px; }
-    #status { margin-left:8px; color:#666; font-size:14px; }
-    #topLabel { font-weight:600; margin-bottom:6px; }
-  </style>
+<meta charset="UTF-8">
+<title>Plant Image Search (PLANTS array matching)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font-family: sans-serif; padding: 15px; }
+  video { width: 260px; height: 200px; background:#000; border-radius:6px; }
+  #preview { width:200px; height:150px; border:1px solid #ccc; object-fit:cover; }
+  #results { margin-top:20px; display:grid; grid-template-columns:repeat(auto-fill,200px); gap:14px; }
+  .card { border:1px solid #ddd; padding:10px; border-radius:8px; }
+  .thumb { width:100%; height:150px; object-fit:cover; border-radius:6px; }
+</style>
 </head>
 <body>
-  <h2>કેમેરા + ગેલેરી (Lens-style) Search — Top 5 results</h2>
-  <p>કેમેરા પર કૅપ્ચર કરો અથવા ગેલેરી/upload થી ઈમેજ લો — પછી <strong>Search</strong> પર ક્લિક કરો.</p>
 
-  <div class="row">
-    <div>
-      <video id="video" autoplay playsinline></video>
-      <div style="margin-top:8px;">
-        <button id="captureBtn">Capture from Camera</button>
-        <button id="toggleCamBtn">Start Camera</button>
-      </div>
-    </div>
+<h2>Plant Search by Image (No JSON, Only PLANTS Data)</h2>
 
-    <div class="controls">
-      <input type="file" id="fileInput" accept="image/*" />
-      <img id="previewImg" alt="preview" src="" />
-      <div style="display:flex; gap:8px; align-items:center;">
-        <button id="searchBtn">Search</button>
-        <span id="status"></span>
-      </div>
-    </div>
+<div style="display:flex; gap:25px; flex-wrap:wrap;">
+  <div>
+    <video id="cam" autoplay playsinline></video><br>
+    <button id="startCam">Start Camera</button>
+    <button id="capture">Capture</button>
   </div>
 
-  <canvas id="workCanvas" width="128" height="128"></canvas>
+  <div>
+    <input type="file" id="upload" accept="image/*"><br><br>
+    <img id="preview"><br><br>
+    <button id="search">Search</button>
+    <span id="status" style="margin-left:10px;color:#555"></span>
+  </div>
+</div>
 
-  <div id="results"></div>
+<canvas id="cvs" width="128" height="128" style="display:none"></canvas>
 
-  <script>
-    
-    const PLANTS_JSON_URL = "https://keshavsrushti1925.github.io/keshavsrushti/plants.js";
-    // ============================================================
+<div id="results"></div>
+<script src="plant.js"></script>
+<script>
 
-    const video = document.getElementById('video');
-    const toggleCamBtn = document.getElementById('toggleCamBtn');
-    const captureBtn = document.getElementById('captureBtn');
-    const fileInput = document.getElementById('fileInput');
-    const previewImg = document.getElementById('previewImg');
-    const workCanvas = document.getElementById('workCanvas');
-    const ctx = workCanvas.getContext('2d');
-    const searchBtn = document.getElementById('searchBtn');
-    const statusEl = document.getElementById('status');
-    const resultsEl = document.getElementById('results');
+// -----------------------------------------------------------
 
-    let stream = null;
-    let lastInputImage = null; // Image object to search with
+const cam = document.getElementById("cam");
+const upload = document.getElementById("upload");
+const preview = document.getElementById("preview");
+const cvs = document.getElementById("cvs");
+const ctx = cvs.getContext("2d");
+const resultsEl = document.getElementById("results");
+const statusEl = document.getElementById("status");
 
-    // Toggle camera on/off
-    toggleCamBtn.addEventListener('click', async () => {
-      if (stream) {
-        stopCamera();
-        toggleCamBtn.textContent = 'Start Camera';
-      } else {
-        try {
-          stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio:false });
-          video.srcObject = stream;
-          toggleCamBtn.textContent = 'Stop Camera';
-        } catch (err) {
-          console.error(err);
-          alert('Camera access denied or not available.');
-        }
-      }
-    });
+let inputImg = null; 
+let camStream = null;
 
-    function stopCamera(){
-      if (stream) {
-        stream.getTracks().forEach(t => t.stop());
-        stream = null;
-        video.srcObject = null;
-      }
-    }
+/* ================ Camera Start ================ */
+document.getElementById("startCam").onclick = async () => {
+  camStream = await navigator.mediaDevices.getUserMedia({ video: true });
+  cam.srcObject = camStream;
+};
 
-    // Capture from video to preview
-    captureBtn.addEventListener('click', () => {
-      if (!stream) {
-        alert('Camera chalavvo (Start Camera) phela.');
-        return;
-      }
-      const w = 640, h = 480;
-      const c = document.createElement('canvas');
-      c.width = w; c.height = h;
-      const cctx = c.getContext('2d');
-      cctx.drawImage(video, 0, 0, w, h);
-      const dataUrl = c.toDataURL('image/jpeg', 0.9);
-      previewImg.src = dataUrl;
-      loadImageFromDataURL(dataUrl).then(img => lastInputImage = img);
-    });
+document.getElementById("capture").onclick = () => {
+  const c = document.createElement("canvas");
+  c.width = 400; c.height = 300;
+  c.getContext("2d").drawImage(cam, 0, 0, 400, 300);
+  preview.src = c.toDataURL();
 
-    // File input (gallery upload)
-    fileInput.addEventListener('change', (e) => {
-      const f = e.target.files && e.target.files[0];
-      if (!f) return;
-      const url = URL.createObjectURL(f);
-      previewImg.src = url;
-      loadImageFromDataURL(url).then(img => lastInputImage = img);
-    });
+  loadImg(preview.src).then(img => inputImg = img);
+};
 
-    // helper: load image element from dataURL/blob URL
-    function loadImageFromDataURL(url) {
-      return new Promise((res, rej) => {
-        const img = new Image();
-        img.crossOrigin = "Anonymous";
-        img.onload = () => res(img);
-        img.onerror = (e) => rej(e);
-        img.src = url;
+/* ================ Gallery Upload ================ */
+upload.onchange = e => {
+  const url = URL.createObjectURL(e.target.files[0]);
+  preview.src = url;
+  loadImg(url).then(img => inputImg = img);
+};
+
+/* ================ Helper: Load Image ================ */
+function loadImg(url){
+  return new Promise((res, rej) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => res(img);
+    img.onerror = e => rej(e);
+    img.src = url;
+  });
+}
+
+/* ================ aHash (8×8) ================ */
+function aHash(img){
+  const s = 8;
+  ctx.drawImage(img, 0, 0, s, s);
+  const data = ctx.getImageData(0,0,s,s).data;
+
+  let gray = [], sum = 0;
+
+  for (let i=0; i<64; i++){
+    const r = data[i*4], g=data[i*4+1], b=data[i*4+2];
+    const v = 0.299*r + 0.587*g + 0.114*b;
+    gray.push(v);
+    sum += v;
+  }
+
+  const avg = sum / 64;
+  return gray.map(v => v >= avg ? "1" : "0").join("");
+}
+
+/* ================ Hamming Distance ================ */
+function hamming(a,b){
+  let d=0;
+  for (let i=0;i<a.length;i++){
+    if (a[i] !== b[i]) d++;
+  }
+  return d;
+}
+
+/* ================ Main SEARCH BUTTON ================ */
+document.getElementById("search").onclick = async () => {
+  if (!inputImg) return alert("Capture or Upload image first!");
+
+  statusEl.textContent = "Computing user image hash...";
+  const queryHash = aHash(inputImg);
+
+  let matches = [];
+
+  statusEl.textContent = "Comparing with PLANTS images...";
+
+  for (let plant of PLANTS){
+    try {
+      const img = await loadImg(plant.image);
+      const hash = aHash(img);
+      const dist = hamming(queryHash, hash);
+
+      matches.push({
+        ...plant,
+        dist,
       });
+    } catch (err) {
+      console.log("error loading", plant.image);
     }
+  }
 
-    // Compute aHash (average hash) for an image element
-    // returns string of bits length 64 (8x8)
-    function computeAHash(img, size=8) {
-      // draw resized grayscale to canvas
-      const s = size;
-      const tmp = document.createElement('canvas');
-      tmp.width = s;
-      tmp.height = s;
-      const tctx = tmp.getContext('2d');
-      // draw image covering canvas (maintain aspect by cover)
-      tctx.drawImage(img, 0, 0, s, s);
-      const imd = tctx.getImageData(0,0,s,s).data;
-      let gray = [];
-      let sum = 0;
-      for (let i=0;i<s*s;i++){
-        const r = imd[i*4], g = imd[i*4+1], b = imd[i*4+2];
-        const v = Math.round(0.299*r + 0.587*g + 0.114*b);
-        gray.push(v);
-        sum += v;
-      }
-      const avg = sum / (s*s);
-      let bits = '';
-      for (let i=0;i<gray.length;i++){
-        bits += (gray[i] >= avg) ? '1' : '0';
-      }
-      return bits;
-    }
+  matches.sort((a,b)=> a.dist - b.dist);
 
-    // Hamming distance between two bit-strings
-    function hammingDist(a,b) {
-      if (a.length !== b.length) return Infinity;
-      let d = 0;
-      for (let i=0;i<a.length;i++) if (a[i] !== b[i]) d++;
-      return d;
-    }
+  const top5 = matches.slice(0,5);
 
-    // Fetch plants.json & compare
-    async function performSearch() {
-      if (!lastInputImage) {
-        alert('પેહલા ઇમેજ select અથવા capture કરો.');
-        return;
-      }
-      statusEl.textContent = 'Loading list from GitHub...';
-      resultsEl.innerHTML = '';
-      let list;
-      try {
-        const r = await fetch(PLANTS_JSON_URL);
-        if (!r.ok) throw new Error('Cannot load plants.json — check URL and CORS (must be raw.githubusercontent link).');
-        list = await r.json();
-        if (!Array.isArray(list)) throw new Error('plants.json should be an array');
-      } catch (err) {
-        console.error(err);
-        statusEl.textContent = '';
-        alert('plants.json load error: ' + err.message);
-        return;
-      }
+  resultsEl.innerHTML = "";
+  statusEl.textContent = "Done.";
 
-      statusEl.textContent = 'Computing query image hash...';
-      const queryHash = computeAHash(lastInputImage, 8);
+  top5.forEach(p => {
+    const div = document.createElement("div");
+    div.className = "card";
 
-      // fetch all repo images in parallel, compute hash and distance
-      statusEl.textContent = 'Fetching images and comparing... (આ સમય થોડી દેવી શકે છે)';
-      const comparisons = [];
-      // Limit concurrency to avoid too many parallel fetches? We'll do in small batches
-      const batchSize = 8;
-      for (let i=0;i<list.length;i+=batchSize) {
-        const batch = list.slice(i, i+batchSize);
-        const promises = batch.map(async (item) => {
-          try {
-            // Ensure image URL is absolute (user should provide raw.githubusercontent links)
-            const imgUrl = item.image;
-            const resp = await fetch(imgUrl, {mode:'cors'});
-            if (!resp.ok) throw new Error('image load failed');
-            const blob = await resp.blob();
-            const objUrl = URL.createObjectURL(blob);
-            const img = await loadImageFromDataURL(objUrl);
-            const h = computeAHash(img, 8);
-            const dist = hammingDist(queryHash, h);
-            URL.revokeObjectURL(objUrl);
-            return { item, dist, hash:h };
-          } catch (err) {
-            // skip image on error
-            console.warn('skip image', item, err);
-            return null;
-          }
-        });
-        const res = await Promise.all(promises);
-        comparisons.push(...res.filter(x=>x));
-        statusEl.textContent = `Comparing... ${Math.min(i+batchSize, list.length)}/${list.length}`;
-      }
+    div.innerHTML = `
+      <img src="${p.image}" class="thumb">
+      <div><b>${p.name}</b></div>
+      <div>Category: ${p.category}</div>
+      <div>Count: ${p.count}</div>
+      <div>Match Score: ${p.dist}</div>
+    `;
+    resultsEl.appendChild(div);
+  });
+};
 
-      // sort by distance (lower = more similar), pick top 5
-      comparisons.sort((a,b)=> a.dist - b.dist);
-      const top = comparisons.slice(0,5);
-      statusEl.textContent = `Done — top ${top.length} results shown (distance lower = better match).`;
+</script>
 
-      // render results
-      resultsEl.innerHTML = '';
-      if (top.length === 0) {
-        resultsEl.innerHTML = '<div>No matches found.</div>';
-        return;
-      }
-      top.forEach(entry => {
-        const el = document.createElement('div');
-        el.className = 'card';
-        const img = document.createElement('img');
-        img.className = 'thumb';
-        img.src = entry.item.image;
-        img.alt = entry.item.name || '';
-        const meta = document.createElement('div');
-        meta.className = 'meta';
-        meta.innerHTML = `<div id="topLabel">${entry.item.name || '(unnamed)'}</div>
-                          <div>Distance: ${entry.dist}</div>
-                          ${entry.item.extra ? `<div>${entry.item.extra}</div>` : ''}`;
-        el.appendChild(img);
-        el.appendChild(meta);
-        resultsEl.appendChild(el);
-      });
-    }
-
-    searchBtn.addEventListener('click', performSearch);
-
-    // If user clicks preview image, set it as lastInputImage (in case of object URLs)
-    previewImg.addEventListener('load', () => {
-      loadImageFromDataURL(previewImg.src).then(img => lastInputImage = img).catch(()=>{});
-    });
-
-    // Stop camera on page unload
-    window.addEventListener('beforeunload', stopCamera);
-  </script>
 </body>
 </html>
-
