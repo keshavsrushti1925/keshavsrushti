@@ -7,8 +7,9 @@
         .preview {
             width: 200px;
             margin: 10px;
+            border: 1px solid #333;
         }
-        
+
         .match-box {
             padding: 10px;
             margin-top: 20px;
@@ -26,103 +27,112 @@
     <br><br>
     <img id="userImg" class="preview">
 
+    <div id="results" class="match-box"></div>
 
-    <div id="result" class="match-box"></div>
-  <script src="plants.js> </script>
+    <!-- TensorFlow JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+
+    <!-- Your plants data -->
+    <script src="plants.js"></script>
+
     <script>
-      let model;
+        let model;
 
-// Load MobileNet AI model
-async function loadModel() {
-  model = await tf.loadGraphModel(
-    "https://tfhub.storage.googleapis.com/tensorflow/tfjs-model/imagenet/mobilenet_v2_140_224/classification/4/model.json",
-    { fromTFHub: true }
-  );
-}
-loadModel();
+        // Load MobileNet model
+        async function loadModel() {
+            model = await tf.loadGraphModel(
+                "https://tfhub.storage.googleapis.com/tensorflow/tfjs-model/imagenet/mobilenet_v2_140_224/classification/4/model.json",
+                { fromTFHub: true }
+            );
+            console.log("Model Loaded");
+        }
+        loadModel();
 
-// Extract feature vector
-function getFeatures(img) {
-  return tf.tidy(() => {
-    const t = tf.browser.fromPixels(img)
-      .resizeBilinear([224, 224])
-      .toFloat()
-      .expandDims(0);
+        // Convert image to vector
+        function getFeatures(img) {
+            return tf.tidy(() => {
+                const t = tf.browser.fromPixels(img)
+                    .resizeBilinear([224, 224])
+                    .toFloat()
+                    .expandDims(0);
+                return model.predict(t).squeeze().arraySync();
+            });
+        }
 
-    return model.predict(t).squeeze().arraySync();
-  });
-}
+        // Cosine similarity
+        function cosineSimilarity(a, b) {
+            let dot = 0, na = 0, nb = 0;
+            for (let i = 0; i < a.length; i++) {
+                dot += a[i] * b[i];
+                na += a[i] * a[i];
+                nb += b[i] * b[i];
+            }
+            return (dot / (Math.sqrt(na) * Math.sqrt(nb))) * 100;
+        }
 
-// Cosine similarity
-function cosineSimilarity(a, b) {
-  let dot = 0, na = 0, nb = 0;
-  for (let i = 0; i < a.length; i++) {
-    dot += a[i] * b[i];
-    na += a[i] * a[i];
-    nb += b[i] * b[i];
-  }
-  return (dot / (Math.sqrt(na) * Math.sqrt(nb))) * 100;
-}
+        // Load plant images once
+        async function loadPlantVector(p) {
+            if (p.vector) return;
 
-// Preload plant vector
-async function loadPlantVector(p) {
-  if (p.vector) return;
+            const img = new Image();
+            img.src = p.image;
+            await img.decode();
 
-  const img = new Image();
-  img.src = p.image;
-  await img.decode();
+            p.vector = getFeatures(img);
+        }
 
-  p.vector = getFeatures(img);
-}
+        // Main Matching Function
+        async function findBestMatch(file) {
+            const bmp = await createImageBitmap(file);
+            const userVec = getFeatures(bmp);
 
-// ===== MAIN — BEST LOOK MATCH ONLY =====
-async function findBestMatch(file) {
-  const bmp = await createImageBitmap(file);
-  const userVec = getFeatures(bmp);
+            let best = null;
 
-  let best = null;
+            for (let p of PLANTS) {
+                await loadPlantVector(p);
+                const score = cosineSimilarity(userVec, p.vector);
 
-  for (let p of PLANTS) {
-    await loadPlantVector(p);
+                if (!best || score > best.score) {
+                    best = { ...p, score };
+                }
+            }
 
-    const score = cosineSimilarity(userVec, p.vector);
+            return best;
+        }
 
-    if (!best || score > best.score) {
-      best = { ...p, score };
-    }
-  }
+        // Input Listener
+        document.getElementById("inputImage").addEventListener("change", async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
 
-  return best;
-}
+            // Show preview
+            document.getElementById("userImg").src = URL.createObjectURL(file);
 
-// UI render
-document.getElementById("fileInput").addEventListener("change", async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+            // Wait until model is ready
+            if (!model) {
+                alert("Model loading... please wait 2 seconds.");
+                return;
+            }
 
-  const result = await findBestMatch(file);
+            const result = await findBestMatch(file);
 
-  const box = document.getElementById("results");
-  box.innerHTML = "";
+            const box = document.getElementById("results");
+            box.innerHTML = "";
 
-  if (!result || result.score < 70) {
-    box.innerHTML = "<p>No similar plant found.</p>";
-    return;
-  }
+            if (!result || result.score < 70) {
+                box.innerHTML = "<p>No similar plant found.</p>";
+                return;
+            }
 
-  box.innerHTML = `
-    <div class="card">
-      <h3>${result.name}</h3>
-      <p><strong>Visual Match:</strong> ${result.score.toFixed(2)}%</p>
-      <img src="${result.image}" width="150"><br>
-      <p>${result.benefits}</p>
-    </div>
-  `;
-});
-
+            box.innerHTML = `
+                <h3>${result.name}</h3>
+                <p><strong>Visual Match:</strong> ${result.score.toFixed(2)}%</p>
+                <img src="${result.image}" width="150"><br>
+                <p>${result.benefits}</p>
+            `;
+        });
     </script>
 
 </body>
 
 </html>
-
