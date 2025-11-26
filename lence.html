@@ -1,167 +1,224 @@
 <!DOCTYPE html>
 <html lang="gu">
+
 <head>
-<meta charset="UTF-8">
-<title>Plant Image Search (PLANTS array matching)</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-  body { font-family: sans-serif; padding: 15px; }
-  video { width: 260px; height: 200px; background:#000; border-radius:6px; }
-  #preview { width:200px; height:150px; border:1px solid #ccc; object-fit:cover; }
-  #results { margin-top:20px; display:grid; grid-template-columns:repeat(auto-fill,200px); gap:14px; }
-  .card { border:1px solid #ddd; padding:10px; border-radius:8px; }
-  .thumb { width:100%; height:150px; object-fit:cover; border-radius:6px; }
-</style>
+    <meta charset="UTF-8">
+    <title>Plant Image Search (PLANTS array matching)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 15px;
+        }
+        
+        video {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            border-radius: 6px;
+        }
+        
+        #preview {
+            width: 200px;
+            height: 150px;
+            border: 1px solid #ccc;
+            object-fit: cover;
+        }
+        
+        #results {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 200px);
+            gap: 14px;
+        }
+        
+        .card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .thumb {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+        
+        #capture {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            background-color: red;
+            border: solid white;
+        }
+    </style>
 </head>
+
 <body>
 
-<h2>Plant Search by Image (No JSON, Only PLANTS Data)</h2>
 
-<div style="display:flex; gap:25px; flex-wrap:wrap;">
-  <div>
-    <video id="cam" autoplay playsinline></video><br>
-    <button id="startCam">Start Camera</button>
-    <button id="capture">Capture</button>
-  </div>
 
-  <div>
-    <input type="file" id="upload" accept="image/*"><br><br>
-    <img id="preview"><br><br>
-    <button id="search">Search</button>
-    <span id="status" style="margin-left:10px;color:#555"></span>
-  </div>
-</div>
+    <div style="display:flex; gap: 100px; flex-wrap:wrap;">
+        <div>
+            <video id="cam" autoplay playsinline> <button id="capture">Capture</button></video><br>
+          
+        </div>
 
-<canvas id="cvs" width="128" height="128" style="display:none"></canvas>
+        <div>
+            <input type="file" id="upload" accept="image/*"><br><br>
+            <img id="preview"><br><br>
+            <button id="search">Search</button>
+            <span id="status" style="margin-left:10px;color:#555"></span>
+        </div>
+    </div>
 
-<div id="results"></div>
-<script src="plants.js"></script>
-<script>
+    <canvas id="cvs" width="128" height="128" style="display:none"></canvas>
 
-// -----------------------------------------------------------
+    <div id="results"></div>
+    <script src="plants.js"></script>
+    <script>
+        // -----------------------------------------------------------
 
-const cam = document.getElementById("cam");
-const upload = document.getElementById("upload");
-const preview = document.getElementById("preview");
-const cvs = document.getElementById("cvs");
-const ctx = cvs.getContext("2d");
-const resultsEl = document.getElementById("results");
-const statusEl = document.getElementById("status");
+        const cam = document.getElementById("cam");
+        const upload = document.getElementById("upload");
+        const preview = document.getElementById("preview");
+        const cvs = document.getElementById("cvs");
+        const ctx = cvs.getContext("2d");
+        const resultsEl = document.getElementById("results");
+        const statusEl = document.getElementById("status");
 
-let inputImg = null; 
-let camStream = null;
+        let inputImg = null;
+        let camStream = null;
 
-/* ================ Camera Start ================ */
-document.getElementById("startCam").onclick = async () => {
-  camStream = await navigator.mediaDevices.getUserMedia({ video: true });
-  cam.srcObject = camStream;
-};
 
-document.getElementById("capture").onclick = () => {
-  const c = document.createElement("canvas");
-  c.width = 400; c.height = 300;
-  c.getContext("2d").drawImage(cam, 0, 0, 400, 300);
-  preview.src = c.toDataURL();
+        /* ================ Auto Start Camera On Page Load ================ */
+        window.addEventListener("load", async() => {
+            try {
+                camStream = await navigator.mediaDevices.getUserMedia({
+                    video: true
+                });
+                cam.srcObject = camStream;
+                console.log("Camera started automatically ✅");
+            } catch (err) {
+                console.log("Camera permission denied or error ❌", err);
+            }
+        });
 
-  loadImg(preview.src).then(img => inputImg = img);
-};
 
-/* ================ Gallery Upload ================ */
-upload.onchange = e => {
-  const url = URL.createObjectURL(e.target.files[0]);
-  preview.src = url;
-  loadImg(url).then(img => inputImg = img);
-};
+        document.getElementById("capture").onclick = () => {
+            const c = document.createElement("canvas");
+            c.width = 400;
+            c.height = 300;
+            c.getContext("2d").drawImage(cam, 0, 0, 400, 300);
+            preview.src = c.toDataURL();
 
-/* ================ Helper: Load Image ================ */
-function loadImg(url){
-  return new Promise((res, rej) => {
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => res(img);
-    img.onerror = e => rej(e);
-    img.src = url;
-  });
-}
+            loadImg(preview.src).then(img => inputImg = img);
+        };
 
-/* ================ aHash (8×8) ================ */
-function aHash(img){
-  const s = 8;
-  ctx.drawImage(img, 0, 0, s, s);
-  const data = ctx.getImageData(0,0,s,s).data;
+        /* ================ Gallery Upload ================ */
+        upload.onchange = e => {
+            const url = URL.createObjectURL(e.target.files[0]);
+            preview.src = url;
+            loadImg(url).then(img => inputImg = img);
+        };
 
-  let gray = [], sum = 0;
+        /* ================ Helper: Load Image ================ */
+        function loadImg(url) {
+            return new Promise((res, rej) => {
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.onload = () => res(img);
+                img.onerror = e => rej(e);
+                img.src = url;
+            });
+        }
 
-  for (let i=0; i<64; i++){
-    const r = data[i*4], g=data[i*4+1], b=data[i*4+2];
-    const v = 0.299*r + 0.587*g + 0.114*b;
-    gray.push(v);
-    sum += v;
-  }
+        /* ================ aHash (8×8) ================ */
+        function aHash(img) {
+            const s = 8;
+            ctx.drawImage(img, 0, 0, s, s);
+            const data = ctx.getImageData(0, 0, s, s).data;
 
-  const avg = sum / 64;
-  return gray.map(v => v >= avg ? "1" : "0").join("");
-}
+            let gray = [],
+                sum = 0;
 
-/* ================ Hamming Distance ================ */
-function hamming(a,b){
-  let d=0;
-  for (let i=0;i<a.length;i++){
-    if (a[i] !== b[i]) d++;
-  }
-  return d;
-}
+            for (let i = 0; i < 64; i++) {
+                const r = data[i * 4],
+                    g = data[i * 4 + 1],
+                    b = data[i * 4 + 2];
+                const v = 0.299 * r + 0.587 * g + 0.114 * b;
+                gray.push(v);
+                sum += v;
+            }
 
-/* ================ Main SEARCH BUTTON ================ */
-document.getElementById("search").onclick = async () => {
-  if (!inputImg) return alert("Capture or Upload image first!");
+            const avg = sum / 64;
+            return gray.map(v => v >= avg ? "1" : "0").join("");
+        }
 
-  statusEl.textContent = "Computing user image hash...";
-  const queryHash = aHash(inputImg);
+        /* ================ Hamming Distance ================ */
+        function hamming(a, b) {
+            let d = 0;
+            for (let i = 0; i < a.length; i++) {
+                if (a[i] !== b[i]) d++;
+            }
+            return d;
+        }
 
-  let matches = [];
+        /* ================ Main SEARCH BUTTON ================ */
+        document.getElementById("search").onclick = async() => {
+            if (!inputImg) return alert("Capture or Upload image first!");
 
-  statusEl.textContent = "Comparing with PLANTS images...";
+            statusEl.textContent = "Computing user image hash...";
+            const queryHash = aHash(inputImg);
 
-  for (let plant of PLANTS){
-    try {
-      const img = await loadImg(plant.image);
-      const hash = aHash(img);
-      const dist = hamming(queryHash, hash);
+            let matches = [];
 
-      matches.push({
-        ...plant,
-        dist,
-      });
-    } catch (err) {
-      console.log("error loading", plant.image);
-    }
-  }
+            statusEl.textContent = "Comparing with PLANTS images...";
 
-  matches.sort((a,b)=> a.dist - b.dist);
+            for (let plant of PLANTS) {
+                try {
+                    const img = await loadImg(plant.image);
+                    const hash = aHash(img);
+                    const dist = hamming(queryHash, hash);
 
-  const top5 = matches.slice(0,5);
+                    matches.push({
+                        ...plant,
+                        dist,
+                    });
+                } catch (err) {
+                    console.log("error loading", plant.image);
+                }
+            }
 
-  resultsEl.innerHTML = "";
-  statusEl.textContent = "Done.";
+            matches.sort((a, b) => a.dist - b.dist);
 
-  top5.forEach(p => {
-    const div = document.createElement("div");
-    div.className = "card";
+            const top5 = matches.slice(0, 5);
 
-    div.innerHTML = `
+            resultsEl.innerHTML = "";
+            statusEl.textContent = "Done.";
+
+            top5.forEach(p => {
+                const div = document.createElement("div");
+                div.className = "card";
+
+                div.innerHTML = `
       <img src="${p.image}" class="thumb">
       <div><b>${p.name}</b></div>
       <div>Category: ${p.category}</div>
       <div>Count: ${p.count}</div>
       <div>Match Score: ${p.dist}</div>
     `;
-    resultsEl.appendChild(div);
-  });
-};
-
-</script>
+                resultsEl.appendChild(div);
+            });
+        };
+    </script>
 
 </body>
-</html>
 
+</html>
