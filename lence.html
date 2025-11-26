@@ -45,19 +45,6 @@
             border-radius: 6px;
         }
         
-        #capture {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: #222;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            background-color: red;
-            border: solid white;
-        }
-        
         .camera-wrapper {
             position: relative;
             /* parent layer */
@@ -65,24 +52,43 @@
             height: 100%;
         }
         
-        .camera-btn {
+        #capture {
             position: absolute;
             /* overlay layer */
             bottom: 12px;
             /* niche thi space */
             left: 50%;
             transform: translateX(-50%);
-            width: 60px;
-            height: 60px;
             border-radius: 50%;
-            /* perfect round */
-            background: #222;
-            color: #fff;
-            border: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
-            font-size: 14px;
-            z-index: 10;
-            /* video thi upar */
+            background-color: red;
+            border: solid white;
+        }
+        /* Hide default file input */
+        #upload {
+          display: none;
+            position: absolute;
+            /* overlay layer */
+            bottom: 12px;
+            /* niche thi space */
+            left: 25%;
+            transform: translateX(-50%);
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: none;
+            align-items: none;
+            cursor: pointer;
+            background-color: red;
+            border: solid white;
         }
     </style>
 </head>
@@ -91,15 +97,15 @@
 
 
 
-    <div style="display:flex; gap: 100px; flex-wrap:wrap;">
+    <div style="display:flex; gap: 10px; flex-wrap:wrap;">
         <div class="camera-wrapper">
             <video id="cam" autoplay playsinline></video>
-            <button id="capture" class="camera-btn"></button>
+            <button id="capture"></button>
+            <input type="file" id="upload" class="gallery-btn" accept="image/*"><br>
         </div>
 
 
         <div>
-            <input type="file" id="upload" accept="image/*"><br><br>
             <img id="preview"><br><br>
             <button id="search">Search</button>
             <span id="status" style="margin-left:10px;color:#555"></span>
@@ -139,6 +145,7 @@
         });
 
 
+
         document.getElementById("capture").onclick = () => {
             const c = document.createElement("canvas");
             c.width = 400;
@@ -147,6 +154,7 @@
             preview.src = c.toDataURL();
 
             loadImg(preview.src).then(img => inputImg = img);
+            document.querySelector(".camera-wrapper").style.display = "none";
         };
 
         /* ================ Gallery Upload ================ */
