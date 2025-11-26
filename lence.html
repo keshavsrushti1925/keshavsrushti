@@ -57,28 +57,33 @@
             background-color: red;
             border: solid white;
         }
+        
         .camera-wrapper {
-  position: relative;  /* parent layer */
-  width: 100%;
-  height: 100%;
-}
-
-.camera-btn {
-  position: absolute;  /* overlay layer */
-  bottom: 12px;        /* niche thi space */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;  /* perfect round */
-  background: #222;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  z-index: 10;         /* video thi upar */
-}
-
+            position: relative;
+            /* parent layer */
+            width: 100%;
+            height: 100%;
+        }
+        
+        .camera-btn {
+            position: absolute;
+            /* overlay layer */
+            bottom: 12px;
+            /* niche thi space */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            /* perfect round */
+            background: #222;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 10;
+            /* video thi upar */
+        }
     </style>
 </head>
 
@@ -87,11 +92,11 @@
 
 
     <div style="display:flex; gap: 100px; flex-wrap:wrap;">
-      <div class="camera-wrapper">
-        <video id="cam" autoplay playsinline></video>
-        <button id="capture" class="camera-btn"></button>
-      </div>
-      
+        <div class="camera-wrapper">
+            <video id="cam" autoplay playsinline></video>
+            <button id="capture" class="camera-btn"></button>
+        </div>
+
 
         <div>
             <input type="file" id="upload" accept="image/*"><br><br>
@@ -127,9 +132,9 @@
                     video: true
                 });
                 cam.srcObject = camStream;
-                console.log("Camera started automatically ✅");
+                alert("Camera started automatically ✅");
             } catch (err) {
-                console.log("Camera permission denied or error ❌", err);
+                alert("Camera permission denied or error ❌", err);
             }
         });
 
