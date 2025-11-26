@@ -90,6 +90,80 @@
             background-color: red;
             border: solid white;
         }
+
+        /* CSS - Camera flip icon (pure CSS) */
+        #cameraFlip{
+          position: absolute;
+            /* overlay layer */
+            bottom: 12px;
+            /* niche thi space */
+            left: 75%;
+            transform: translateX(-50%);
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            background-color: red;
+            border: solid white;
+}
+
+/* circular arc (main ring of arrow) */
+#cameraFlip:before{
+  content:"";
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  border:3px solid transparent;
+  border-top-color: #fff;      /* arc color */
+  border-right-color: #fff;
+  transform: rotate(-45deg);
+  position:absolute;
+  opacity:0.95;
+  box-sizing:border-box;
+}
+
+/* arrow head (triangle) */
+#cameraFlip:after{
+  content:"";
+  position:absolute;
+  width:0;
+  height:0;
+  border-left:6px solid transparent;
+  border-right:6px solid transparent;
+  border-top:9px solid #fff;   /* arrow head color */
+  /* place arrow head at end of arc */
+  top: 8px;
+  right: 10px;
+  transform: rotate(0deg);
+  opacity:0.95;
+}
+
+/* small camera dot to indicate camera (optional decorative) */
+.icon .dot{
+  width:6px;
+  height:6px;
+  background:#fff;
+  border-radius:2px;
+  position:relative;
+  left:-2px;
+  top:6px;
+  opacity:0.0; /* set 0 if you don't want dot; set 1 to show */
+}
+
+/* hover / active */
+.icon:hover{
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+  background: #2a2a2a;
+}
+.icon:active{
+  transform: translateY(0) scale(.99);
+}
+
     </style>
 </head>
 
@@ -100,8 +174,10 @@
     <div style="display:flex; gap: 10px; flex-wrap:wrap;">
         <div class="camera-wrapper">
             <video id="cam" autoplay playsinline></video>
-            <button id="capture"></button>
-            <input type="file" id="upload" class="gallery-btn" accept="image/*"><br>
+            <input type="file" id="upload" class="icon" accept="image/*"><br>
+            <button id="capture"class="icon"></button>
+            <button id="cameraFlip"class="icon"></button>
+
         </div>
 
 
@@ -130,6 +206,8 @@
         let inputImg = null;
         let camStream = null;
 
+// Bind switch function to your flip button
+document.getElementById("cameraFlip").addEventListener("click", switchCamera);
 
         /* ================ Auto Start Camera On Page Load ================ */
         window.addEventListener("load", async() => {
