@@ -211,7 +211,37 @@
         let camStream = null;
 
         // Bind switch function to your flip button
-        document.getElementById("cameraFlip").addEventListener("click", icon);
+        document.getElementById("cameraFlip").addEventListener("click", switchCamera);
+        let currentStream;
+let useFrontCamera = true;
+
+async function startCamera() {
+  const constraints = {
+    video: {
+      facingMode: useFrontCamera ? "user" : "environment"
+    }
+  };
+
+  if (currentStream) {
+    currentStream.getTracks().forEach(track => track.stop());
+  }
+
+  try {
+    currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+    document.getElementById("cam").srcObject = currentStream;
+  } catch (err) {
+    console.error("Camera error:", err);
+  }
+}
+
+function switchCamera() {
+  useFrontCamera = !useFrontCamera;
+  startCamera();
+}
+
+// camera start on load
+startCamera();
+
 
         /* ================ Auto Start Camera On Page Load ================ */
         window.addEventListener("load", async() => {
