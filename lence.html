@@ -19,10 +19,17 @@
         }
         
         #preview {
-            width: 200px;
-            height: 150px;
+            width: 100%;
+            height: 100%;
             border: 1px solid #ccc;
             object-fit: cover;
+        }
+        
+        #search {
+            height: 10px;
+            width: 15px;
+            border-radius: 50%;
+            border: solid white;
         }
         
         #results {
@@ -175,7 +182,7 @@
 
 
 
-    <div style="display:flex; gap: 10px; flex-wrap:wrap;">
+    <div style="display:flex; flex-wrap:wrap;">
         <div class="camera-wrapper">
             <video id="cam" autoplay playsinline></video>
             <input type="file" id="upload" class="icon" accept="image/*"><br>
@@ -185,7 +192,7 @@
         </div>
 
 
-        <div>
+        <div class="camera-wrapper">
             <img id="preview"><br><br>
             <button id="search">Search</button>
             <span id="status" style="margin-left:10px;color:#555"></span>
@@ -195,7 +202,7 @@
     <canvas id="cvs" width="128" height="128" style="display:none"></canvas>
 
     <div id="results"></div>
-    <script src="plants.js"></script>
+    <script src="https://github.com/keshavsrushti1925/keshavsrushti/blob/main/plants.js"></script>
     <script>
         // -----------------------------------------------------------
 
@@ -209,38 +216,126 @@
         const icon = document.getElementsByClassName("icon")
         let inputImg = null;
         let camStream = null;
+        const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE"; // ✏ અહીં તમારો Gemini API Key મુકવો
+
+        async function identifyPlantWithGemini(base64Image) {
+            const res = await fetch(
+                "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" + GEMINI_API_KEY, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: "આ છોડનું સામાન્ય નામ એક શબ્દ/લાઈન માં આપો, ફક્ત છોડનું નામ જ."
+                            }, {
+                                inline_data: {
+                                    mime_type: "image/jpeg",
+                                    data: base64Image
+                                }
+                            }]
+                        }]
+                    })
+                }
+            );
+
+            const data = await res.json();
+            if (!data.candidates || !data.candidates.length) {
+                return null;
+            }
+
+            // API response માંથી plant name extract
+            const plantName = data.candidates[0].content.parts[0].text.trim();
+            return plantName;
+        }
+
+        // Image file ને base64 માં convert
+        function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result.split(",")[1]);
+                reader.onerror = err => reject(err);
+            });
+        }
+
+        // ✳ Main SEARCH BUTTON updated logic
+        document.getElementById("search").onclick = async() => {
+            if (!inputImg) return alert("ઈમેજ Capture અથવા Upload કરો!");
+
+            statusEl.textContent = "AI થી plant ઓળખાઈ રહ્યું છે...";
+
+            let base64;
+            const fileInput = upload.files[0];
+            if (fileInput) {
+                base64 = await toBase64(fileInput);
+            } else {
+                // capture કર્યા પછી preview.src માંથી base64 કાઢો
+                base64 = preview.src.split(",")[1];
+            }
+
+            const predictedPlant = await identifyPlantWithGemini(base64);
+
+            if (!predictedPlant) {
+                statusEl.textContent = "Result: છોડ ઓળખી શકાયો નહિ – માહિતી ઉપલબ્ધ નથી.";
+                return;
+            }
+
+            statusEl.textContent = "AI Result: " + predictedPlant + " — DB માં match કરી રહ્યા છીએ...";
+
+            const plantData = PLANTS.find(p => p.name.toLowerCase() === predictedPlant.toLowerCase());
+
+            if (plantData) {
+                statusEl.textContent = "Result: " + plantData.name + " ✅";
+
+                resultsEl.innerHTML = `
+        <div class="card">
+          <img src="${plantData.image}" class="thumb">
+          <div><b>${plantData.name}</b></div>
+          <div>Category: ${plantData.category}</div>
+          <div>Count: ${plantData.count}</div>
+        </div>
+      `;
+            } else {
+                statusEl.textContent = "Result: છોડ ઓળખી શકાયો નહિ – માહિતી ઉપલબ્ધ નથી.";
+                resultsEl.innerHTML = "";
+            }
+        };
+
+
 
         // Bind switch function to your flip button
         document.getElementById("cameraFlip").addEventListener("click", switchCamera);
         let currentStream;
-let useFrontCamera = true;
+        let useFrontCamera = false;
 
-async function startCamera() {
-  const constraints = {
-    video: {
-      facingMode: useFrontCamera ? "user" : "environment"
-    }
-  };
+        async function startCamera() {
+            const constraints = {
+                video: {
+                    facingMode: useFrontCamera ? "user" : "environment"
+                }
+            };
 
-  if (currentStream) {
-    currentStream.getTracks().forEach(track => track.stop());
-  }
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+            }
 
-  try {
-    currentStream = await navigator.mediaDevices.getUserMedia(constraints);
-    document.getElementById("cam").srcObject = currentStream;
-  } catch (err) {
-    console.error("Camera error:", err);
-  }
-}
+            try {
+                currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+                document.getElementById("cam").srcObject = currentStream;
+            } catch (err) {
+                console.error("Camera error:", err);
+            }
+        }
 
-function switchCamera() {
-  useFrontCamera = !useFrontCamera;
-  startCamera();
-}
+        function switchCamera() {
+            useFrontCamera = !useFrontCamera;
+            startCamera();
+        }
 
-// camera start on load
-startCamera();
+        // camera start on load
+        startCamera();
 
 
         /* ================ Auto Start Camera On Page Load ================ */
