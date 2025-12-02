@@ -343,7 +343,7 @@ const PLANTS = [
     "image": "images/medicinal/mitholimdo.webp"
   }
 ];
-import data from "./plants.js";
+
 
 // ====== Data & DOM refs ======
 const grid = document.getElementById('grid');
